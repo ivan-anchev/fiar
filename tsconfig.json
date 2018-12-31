@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "websocket-connection": [
+        "dist/websocket-connection"
+      ],
+      "websocket-connection/*": [
+        "dist/websocket-connection/*"
+      ]
+    }
   }
 }

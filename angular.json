@@ -27,7 +27,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "lib/styles/index.scss"
             ],
             "scripts": []
           },
@@ -127,6 +128,41 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "websocketConnection": {
+      "root": "lib/websocket-connection",
+      "sourceRoot": "lib/websocket-connection/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "lib/websocket-connection/tsconfig.lib.json",
+            "project": "lib/websocket-connection/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "lib/websocket-connection/src/test.ts",
+            "tsConfig": "lib/websocket-connection/tsconfig.spec.json",
+            "karmaConfig": "lib/websocket-connection/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "lib/websocket-connection/tsconfig.lib.json",
+              "lib/websocket-connection/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]
