@@ -1,0 +1,6 @@
+<div class="mat-typography">
+    <mat-card *ngIf="!(isConnected$ | async)">
+      <mat-spinner></mat-spinner>
+      <h5 class="text--center">Loading...</h5>
+    </mat-card>
+</div>
