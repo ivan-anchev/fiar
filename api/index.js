@@ -19,7 +19,7 @@ const WS_SERVER = new WebSocketServer({
     autoAcceptConnections: false
 });
 
-const whitelist = ['http://localhost:8080'];
+const whitelist = ['http://localhost:4200'];
 const isValidOrigin = origin => whitelist.includes(origin);
 
 const isJoinChannelEvent = message =>
