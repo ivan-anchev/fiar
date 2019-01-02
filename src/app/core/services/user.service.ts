@@ -19,7 +19,7 @@ export class UserService {
       return JSON.parse(userData);
     }
 
-    return { name: '' };
+    return { name: '', avatar: 'man' };
   }
 
   /**
