@@ -8,7 +8,7 @@ export interface UserState {
 }
 
 export const initialState: UserState = {
-  user: null,
+  user: { name: '', avatar: 'man' },
   isSessionChecked: false,
   isCheckingSession: false
 };
@@ -20,6 +20,11 @@ export function reducer(state = initialState, action: All): UserState {
         ...state,
         isSessionChecked: true,
         isCheckingSession: false,
+        user: { ...action.payload }
+      };
+    case UserActionTypes.SET_USER:
+      return {
+        ...state,
         user: { ...action.payload }
       };
     default: return state;

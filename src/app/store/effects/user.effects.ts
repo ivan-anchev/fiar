@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, tap } from 'rxjs/operators';
 import { UserService } from '../../core/services/user.service';
-import { UserActionTypes, CheckSessionSuccess } from '../actions/user.actions';
+import { User } from '../../models/user';
+import { UserActionTypes, CheckSessionSuccess, SetUser } from '../actions/user.actions';
+import { Connect } from '../actions/ws.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +24,18 @@ export class UserEffects {
         map(user => new CheckSessionSuccess({ ...user }))
       )
     )
+  );
+
+  @Effect({ dispatch: false })
+  setUser$: Observable<any> = this.actions.pipe(
+    ofType(UserActionTypes.SET_USER),
+    map((action: SetUser ) => action.payload),
+    tap((payload: User) => this.userService.saveCurrent(payload))
+  );
+
+  @Effect()
+  connect$: Observable<any> = this.actions.pipe(
+    ofType(UserActionTypes.SET_USER, UserActionTypes.CHECK_SESSION_SUCCESS),
+    switchMap(action => of(new Connect({ ...(<any>action).payload })))
   );
 }
