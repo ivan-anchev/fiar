@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WSService } from './ws.service';
+import { WsService } from './ws.service';
+import { CoreModule } from '../core.module'
 
 describe('WSService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [CoreModule]
+  }));
 
   it('should be created', () => {
-    const service: WSService = TestBed.get(WSService);
+    const service: WsService = TestBed.get(WsService);
     expect(service).toBeTruthy();
   });
 });
