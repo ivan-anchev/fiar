@@ -6,3 +6,34 @@
     text-align: center;
   }
 }
+
+.flex {
+  display: flex;
+
+  &--column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &--between {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &--center {
+    display: flex;
+    justify-content: center;
+  }
+
+  &--right {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.w {
+  &--1-1 {
+    width: 100%;
+  }
+}
