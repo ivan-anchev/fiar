@@ -1,6 +1,40 @@
 <div class="mat-typography">
-    <mat-card *ngIf="!(isConnected$ | async)">
-      <mat-spinner></mat-spinner>
-      <h5 class="text--center">Loading...</h5>
-    </mat-card>
+  <mat-card *ngIf="!(isSessionCheckReady$ | async); else content;">
+    <mat-spinner></mat-spinner>
+    <h5 class="text--center">Loading...</h5>
+  </mat-card>
+
+
+  <ng-template #content>
+    <ng-container *ngTemplateOutlet="(isProfileEditMode$ | async) ? editTemplate : menuTemplate; context: {$implicit: isProfileEditMode$ | async }">
+    </ng-container>
+
+    <ng-template #editTemplate let-isProfileEditMode>
+      <fiar-profile-editor
+        (cancel)="setProfileEditMode(false)"></fiar-profile-editor>
+    </ng-template>
+
+    <ng-template #menuTemplate let-isProfileEditMode>
+      <mat-card>
+        <mat-card-content>
+          <div class="flc-layout--center-middle flex--column">
+            <fiar-avatar></fiar-avatar>
+            <span class="mat-h2 margin--clear flc-layout--column-middle">
+                {{(user$ | async).name || 'You'}}
+                <button mat-stroked-button (click)="setProfileEditMode(!isProfileEditMode)"><small>Edit Profile</small></button>
+            </span>
+          </div>
+        </mat-card-content>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-actions>
+          <button mat-raised-button color="accent">START GAME</button>
+          <button mat-button color="accent">JOIN GAME</button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-template>
+
+  </ng-template>
+
 </div>

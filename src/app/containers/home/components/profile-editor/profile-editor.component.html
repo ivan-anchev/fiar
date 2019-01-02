@@ -1,0 +1,29 @@
+
+<mat-card>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-card-title>Edit profile</mat-card-title>
+
+    <mat-card-content>
+
+      <div>
+        <mat-radio-group formControlName="avatar" >
+          <mat-label>Chose an avatar</mat-label>
+            <mat-radio-button value="man">Man</mat-radio-button>
+            <mat-radio-button value="woman">Woman</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-form-field>
+        <input matInput formControlName="name" placeholder="Name" />
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button type="submit" mat-raised-button color="accent">Save Profile</button>
+      <button mat-button color="accent" (click)="cancel.next(true)">Cancel</button>
+    </mat-card-actions>
+
+  </form>
+</mat-card>
