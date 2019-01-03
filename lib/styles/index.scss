@@ -24,6 +24,11 @@ body { display: block; }
         justify-content: center;
     }
 
+    &--between {
+      display: flex;
+      justify-content: space-between;
+    }
+
     &--column {
       display: flex;
       flex-direction: column;
@@ -34,6 +39,39 @@ body { display: block; }
       flex-direction: column;
       align-items: center;
     }
+}
+
+.flc-clickable {
+  cursor: pointer;
+}
+
+.flc-margin {
+  &--small {
+    margin: 16px;
+  }
+
+  &--small-top {
+    margin-top: 16px;
+  }
+
+  &--small-horizontal {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  &--large {
+    margin: 24px;
+  }
+
+  &--large-top {
+    margin-top: 24px;
+  }
+}
+
+.flc-color {
+  &--muted {
+    color: rgba(0,0,0,.6);
+  }
 }
 
 .margin {

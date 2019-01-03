@@ -1,3 +1,1 @@
-<div class="flc-game-avatar-group">
-  <span class="flc-game-avatar" [ngClass]="[type || 'man', state || '']"></span>
-</div>
+<span class="flc-game-avatar" [class.active]="isActive" [ngClass]="[type || 'man', state || '']"></span>

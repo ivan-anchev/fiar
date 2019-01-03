@@ -11,16 +11,19 @@
 
     <ng-template #editTemplate let-isProfileEditMode>
       <fiar-profile-editor
-        (cancel)="setProfileEditMode(false)"></fiar-profile-editor>
+        [user]="user$ | async"
+        (submit)="onProfileSubmit($event)"
+        (cancel)="setProfileEditMode(false)">
+      </fiar-profile-editor>
     </ng-template>
 
     <ng-template #menuTemplate let-isProfileEditMode>
-      <mat-card>
+      <mat-card *ngIf="(user$ | async) as user">
         <mat-card-content>
           <div class="flc-layout--center-middle flex--column">
-            <fiar-avatar></fiar-avatar>
+            <fiar-avatar [type]="user.avatar"></fiar-avatar>
             <span class="mat-h2 margin--clear flc-layout--column-middle">
-                {{(user$ | async).name || 'You'}}
+                {{user.name || 'You'}}
                 <button mat-stroked-button (click)="setProfileEditMode(!isProfileEditMode)"><small>Edit Profile</small></button>
             </span>
           </div>

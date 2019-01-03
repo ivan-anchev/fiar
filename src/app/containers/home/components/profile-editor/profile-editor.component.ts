@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { User } from '../../../../models/user';
+import { AvatarTypes } from '../../../../models/avatar.enums';
 
 @Component({
   selector: 'fiar-profile-editor',
@@ -9,26 +10,32 @@ import { User } from '../../../../models/user';
 })
 export class ProfileEditorComponent implements OnInit {
 
-  @Input() user: User;
-
-  form: FormGroup;
+  @Input() user: User = {
+    name: 'Test',
+    avatar: 'man'
+  };
 
   @Output() cancel = new EventEmitter<boolean>();
 
   @Output() submit = new EventEmitter<User>();
 
+  form: FormGroup;
+
+  avatarTypes: Array<string>;
+
   constructor() {
-    this.form = new FormGroup({
-      name: new FormControl(''),
-      avatar: new FormControl('')
-    });
+    this.avatarTypes = Object.values(AvatarTypes);
   }
 
   onSubmit() {
-    console.log(this.form);
+    this.submit.next(this.form.value);
   }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      name: new FormControl(this.user.name),
+      avatar: new FormControl(this.user.avatar)
+    });
   }
 
 }

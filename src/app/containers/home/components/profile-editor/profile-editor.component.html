@@ -1,29 +1,37 @@
-
+<form class="profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
 <mat-card>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <mat-card-title>Edit profile</mat-card-title>
+    <mat-divider></mat-divider>
 
-    <mat-card-content>
+    <mat-card-content class="flc-margin--large-top">
+        <mat-radio-group  formControlName="avatar" >
+          <mat-label class="flc-color--muted">Avatar</mat-label>
 
-      <div>
-        <mat-radio-group formControlName="avatar" >
-          <mat-label>Chose an avatar</mat-label>
-            <mat-radio-button value="man">Man</mat-radio-button>
-            <mat-radio-button value="woman">Woman</mat-radio-button>
+          <div class="flc-layout--between flc-margin--small-horizontal">
+            <fiar-avatar class="flc-clickable"
+              *ngFor="let avatar of avatarTypes; let i = index;"
+              [tabIndex]="i"
+              [type]="avatar"
+              [isActive]="form.controls.avatar.value === avatar"
+              (click)="form.controls.avatar.setValue(avatar)"></fiar-avatar>
+          </div>
         </mat-radio-group>
-      </div>
 
-      <mat-form-field>
-        <input matInput formControlName="name" placeholder="Name" />
+      <mat-form-field class="flc-margin--small-top" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name" [placeholder]="user.name"/>
+        <mat-icon matSuffix>person</mat-icon>
       </mat-form-field>
 
     </mat-card-content>
 
+    <mat-divider></mat-divider>
+
     <mat-card-actions>
       <button type="submit" mat-raised-button color="accent">Save Profile</button>
-      <button mat-button color="accent" (click)="cancel.next(true)">Cancel</button>
+      <button id="cancel-btn" mat-button color="accent" (click)="cancel.next(true)">Cancel</button>
     </mat-card-actions>
 
-  </form>
+
 </mat-card>
+</form>

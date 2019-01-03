@@ -34,6 +34,11 @@ export class HomeComponent implements OnInit {
     this._store.dispatch(new SetProfileEditMode({ isProfileEditMode }));
   }
 
+  onProfileSubmit(userData: User) {
+    this._store.dispatch(new SetUser(userData));
+    this._store.dispatch(new SetProfileEditMode({ isProfileEditMode: false }));
+  }
+
   ngOnInit() {
     // this._store.dispatch(new Connect({ name: 'George '}));
     this._store.dispatch(new CheckSession);

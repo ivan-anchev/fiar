@@ -1,14 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from '../../../store';
 import { HomeComponent } from './home.component';
+import { ProfileEditorComponent } from '../components/profile-editor/profile-editor.component';
 import { CoreModule } from '../../../core/core.module';
 import {
   MatProgressSpinnerModule,
   MatCardModule,
   MatButtonModule,
   MatFormFieldModule,
+  MatRadioModule,
   MatInputModule,
+  MatIconModule,
   MatListModule
 } from '@angular/material';
 import { SharedModule } from '../../../shared/shared.module';
@@ -20,8 +24,11 @@ describe('HomeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        FormsModule, ReactiveFormsModule,
         SharedModule,
         MatListModule,
+        MatIconModule,
+        MatRadioModule,
         MatProgressSpinnerModule,
         MatCardModule,
         MatButtonModule,
@@ -30,7 +37,7 @@ describe('HomeComponent', () => {
         MatInputModule,
         CoreModule
       ],
-      declarations: [ HomeComponent ]
+      declarations: [ HomeComponent, ProfileEditorComponent ]
     })
     .compileComponents();
   }));

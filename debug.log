@@ -1,0 +1,7 @@
+[0102/175743.741:ERROR:process_info.cc(359)] UncheckedAllocate
+[0102/182010.829:ERROR:process_info.cc(359)] UncheckedAllocate
+[0102/194257.875:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
+[0102/194257.876:ERROR:process_info.cc(550)] ReadMemoryInfo failed
+[0102/194257.892:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0102/194257.893:ERROR:exception_snapshot_win.cc(88)] thread ID 65304 not found in process
+[0102/194257.893:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)

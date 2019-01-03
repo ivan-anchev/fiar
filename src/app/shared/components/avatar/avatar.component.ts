@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { AvatarTypes, AvatarStates } from '../../../models/avatar.enums';
 
 @Component({
   selector: 'fiar-avatar',
@@ -11,13 +12,15 @@ export class AvatarComponent implements OnInit, OnChanges {
 
   @Input() state: AvatarStates;
 
+  @Input() isActive: boolean;
+
   constructor() { }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['type'] !== null) {
+    if (changes['type']) {
       const type = changes['type'].currentValue;
       if (type !== AvatarTypes.Woman && type !== AvatarTypes.Man) {
         throw new Error('Invalid Type input value');
@@ -25,14 +28,4 @@ export class AvatarComponent implements OnInit, OnChanges {
     }
   }
 
-}
-
-export enum AvatarTypes {
-  Woman = 'woman',
-  Man = 'man'
-}
-
-export enum AvatarStates {
-  Winning = 'winning',
-  TheirTurn  = 'their-turn'
 }

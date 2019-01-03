@@ -48,6 +48,11 @@ $player-two-color: #8fbc8f;;
     background-position-y: 2px;
     overflow: hidden;
     box-sizing: border-box;
+
+    &.active {
+      border: 1px solid green;
+    }
+
     &:after {
         content: "";
         background-image: url('./assets/hand.svg');

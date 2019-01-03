@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement, SimpleChange } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { AvatarComponent, AvatarTypes, AvatarStates } from './avatar.component';
+import { AvatarComponent } from './avatar.component';
+import { AvatarTypes, AvatarStates } from '../../../models/avatar.enums';
 
 describe('AvatarComponent', () => {
   let component: AvatarComponent;
