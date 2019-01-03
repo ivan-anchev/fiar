@@ -21,7 +21,7 @@
       <mat-card *ngIf="(user$ | async) as user">
         <mat-card-content>
           <div class="flc-layout--center-middle flex--column">
-            <fiar-avatar [type]="user.avatar"></fiar-avatar>
+            <fiar-avatar [type]="user.avatar" isActive="true"></fiar-avatar>
             <span class="mat-h2 margin--clear flc-layout--column-middle">
                 {{user.name || 'You'}}
                 <button mat-stroked-button (click)="setProfileEditMode(!isProfileEditMode)"><small>Edit Profile</small></button>
