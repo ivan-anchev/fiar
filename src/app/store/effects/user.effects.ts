@@ -30,7 +30,7 @@ export class UserEffects {
   setUser$: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.SET_USER),
     map((action: SetUser ) => action.payload),
-    tap((payload: User) => this.userService.saveCurrent(payload))
+    tap(({ name, avatar }: User) => this.userService.saveCurrent({ name, avatar }))
   );
 
   @Effect()

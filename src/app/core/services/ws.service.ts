@@ -54,7 +54,7 @@ export class WsService {
       map(data => data.event),
       filter((event: Event) => (event instanceof CloseEvent)))
     .subscribe(() => this.isConnected$.next(false));
-
+    console.log(this.connection);
     return this.connection;
   }
 
@@ -71,6 +71,7 @@ export class WsService {
    */
   close(): void {
     this.client.close();
+    this.connection = null;
   }
 
 }
