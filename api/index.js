@@ -1,11 +1,13 @@
-const { JOIN_CHANNEL, LEAVE_CHANNEL } = require('./_types.config');
+const { JOIN_CHANNEL, LEAVE_CHANNEL, BROADCAST_OPEN_CHANNELS } = require('./_types.config');
 const WebSocketServer = require('websocket').server;
 const http = require('http');
 
 const CHANNEL_FULL_ERROR = { error: 'CHANNEL_FULL' };
 const CHANNEL_NOT_DEFINED_ERROR = { error: 'CHANNEL_NOT_DEFINED' };
+const NO_FREE_CHANNELS_ERROR = { error: 'NO_FREE_CHANNELS_ERROR'};
 
 const CHANNELS = new Map();
+const CONNECTIONS = new Set();
 
 const server = http.createServer(({ response }) => {
     response.writeHead(404);
@@ -21,6 +23,36 @@ const WS_SERVER = new WebSocketServer({
 
 const whitelist = ['http://localhost:4200'];
 const isValidOrigin = origin => whitelist.includes(origin);
+
+// Connection helpers
+const addConnection = (connection) => {
+  if (!CONNECTIONS.has(connection)) {
+    CONNECTIONS.add(connection);
+  }
+}
+
+const removeConnection = (connection) => {
+  if (CONNECTIONS.has(connection)) {
+    CONNECTIONS.delete(connection);
+  }
+}
+
+const broadcastOpenChannels = (connection = null) => {
+  const openChannels = Array.from(CHANNELS)
+    .filter(([channelName, channel]) => channel.connections.size < channel.maxSize)
+    .map(([channelName, channel]) => channelName);
+
+  const message = {
+    type: BROADCAST_OPEN_CHANNELS,
+    payload: { openChannels }
+  };
+
+  if (connection) {
+    connection.send(JSON.stringify(message));
+  } else {
+    CONNECTIONS.forEach((connection) => connection.send(JSON.stringify({ message })));
+  }
+};
 
 const isJoinChannelEvent = message =>
     (message.type && message.payload && message.type === JOIN_CHANNEL)
@@ -66,18 +98,20 @@ const getChannelByName = channelName => {
   }
   return { channel };
 };
+
+const getFirstFreeChannel = () => {
+  const channel = CHANNELS.find((channel) => channel.size === 1);
+  if (!channel) {
+    return NO_FREE_CHANNELS_ERROR;
+  }
+
+  return { channel };
+}
+
 const getError = (channelName, error) => JSON.stringify({
     channel: { name: channelName },
     ...error
 })
-WS_SERVER.on('connect', connection => {
-  console.log('connection', connection);
-  if (connection.connected) {
-    connection.send(JSON.stringify({
-      id: 'test'
-    }));
-  }
-});
 
 WS_SERVER.on('request', request => {
     if (!isValidOrigin(request.origin)) {
@@ -85,6 +119,8 @@ WS_SERVER.on('request', request => {
         return;
     };
     const connection = request.accept('echo-protocol', request.origin);
+    addConnection(connection);
+    broadcastOpenChannels(connection);
     // Broadcast incoming messages back to other connections on channel
     // First connection to send a JOIN_CHANNEL message, creates the channel
     connection.on('message', (data) => {
@@ -92,6 +128,7 @@ WS_SERVER.on('request', request => {
 
         if (isJoinChannelEvent(message)) {
           let { error } = joinChannel(message, connection);
+          broadcastOpenChannels();
           if (error) {
               return connection.send(getError(channelName, error));
           }
@@ -117,5 +154,8 @@ WS_SERVER.on('request', request => {
             )));
     });
 
-    connection.on('close', () => leaveAllChannels(connection));
+    connection.on('close', () => {
+      leaveAllChannels(connection);
+      removeConnection(connection);
+    });
 });
