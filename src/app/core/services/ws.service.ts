@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { createClient } from 'websocket-connection';
 import { CoreModule } from '../core.module';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: CoreModule
@@ -39,28 +38,60 @@ export class WsService {
    * Connect to Websocket
    * Requires client to be instantiated
    * @param  meta={} Meta data passed to websocket on each message
-   * @return <WSConnetion>
+   * @return <Observable<any>>
    */
-  connect(meta = { }): WSConnection {
-    if (this.connection) {
-      return this.connection;
+  connect(meta = { }): Observable<any> {
+    if (!this.connection) {
+      this.connection = this.client.connect(meta);
     }
 
-    this.connection = this.client.connect(meta);
-    this.isConnected$.next(true);
-    // Manage connection state
-    // If a CloseEvent is received emit that connection is closed
-    this.connection.downstream.pipe(
-      map(data => data.event),
-      filter((event: Event) => (event instanceof CloseEvent)))
-    .subscribe(() => this.isConnected$.next(false));
-    console.log(this.connection);
-    return this.connection;
+    return this.connection.downstream;
+  }
+
+  joinChannel(channelName: string) {
+    const { err, canJoin } = this._canJoinChannel();
+
+    if (err) {
+      throw err;
+    }
+
+    this.channel = this.connection.join(channelName, { maxSize: 2});
+
+    return { name: channelName, size: 2 };
+  }
+
+  createChannel(channelName: string, channelConfig = { maxSize: 2}) {
+    const { err } = this._canJoinChannel();
+
+    if (err) {
+      throw err;
+    }
+
+    this.channel = this.connection.join(channelName, channelConfig);
+
+    return { name: channelName, size: 1};
+  }
+
+  private _canJoinChannel() {
+    let err = null;
+    let canJoin = false;
+
+    if (!this.connection) {
+      err = new Error('Client must be connected to Websocket in order to join a channel');
+    }
+
+    if (this.channel) {
+      err = new Error('Client has already joined a channel');
+    }
+
+    canJoin = true;
+
+    return { err, canJoin };
   }
 
   /**
    * Get current channel
-   * @return <WsChannel>
+   * @return<WsChannel>
    */
   getChannel(): WSChannel {
     return this.channel;
@@ -76,12 +107,12 @@ export class WsService {
 
 }
 
-interface WSConnection  {
+export interface WSConnection  {
   join: (channelName: string, channelConfig: { maxSize: number }) => WSChannel;
   downstream: Observable<any>;
 }
 
-interface WSChannel {
+export interface WSChannel {
   send: (message: any) => void;
   leave: () => void;
   downstream: Observable<any>;
