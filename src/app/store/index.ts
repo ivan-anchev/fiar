@@ -11,12 +11,14 @@ import { environment } from '../../environments/environment';
 import * as ui from './reducers/ui.reducers';
 import * as ws from './reducers/ws.reducers';
 import * as user from './reducers/user.reducers';
+import * as gameFeature from '../containers/game/store';
 import { storeLogger } from 'ngrx-store-logger';
 
 export interface AppState {
   ui: ui.UIState;
   ws: ws.WSState;
   user:  user.UserState;
+  gameFeature?: gameFeature.GameFeatureState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {

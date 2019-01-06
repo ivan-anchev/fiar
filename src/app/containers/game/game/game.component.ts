@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState, selectUser } from '../../../store';
+import { GameFeatureState, selectGameFeature, selectPlayerState, selectPlayersTotal } from '../store';
+import { Add } from '../store/actions/player.actions';
 
 @Component({
   selector: 'fiar-game',
@@ -7,9 +12,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor() { }
+  totalPlayers$: Observable<any>;
+
+  constructor(private _store: Store<AppState>) {
+  }
 
   ngOnInit() {
+    // Add user to players
+    this._store.select(selectUser)
+      .subscribe(player => this._store.dispatch(new Add({ player })));
+    this.totalPlayers$ = this._store.select(selectPlayersTotal);
   }
 
 }

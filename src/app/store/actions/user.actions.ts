@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { User } from '../../models/user';
 
 export enum UserActionTypes {
   CHECK_SESSION = '[User] CHECK_SESSION',
@@ -13,7 +14,7 @@ export class CheckSession implements Action {
 
 export class CheckSessionSuccess implements Action {
   readonly type = UserActionTypes.CHECK_SESSION_SUCCESS;
-  constructor(public payload: { name, avatar }) { }
+  constructor(public payload: User) { }
 }
 
 export class CheckSessionFail implements Action {
@@ -22,7 +23,7 @@ export class CheckSessionFail implements Action {
 
 export class SetUser implements Action {
   readonly type = UserActionTypes.SET_USER;
-  constructor(public payload: { name, avatar }) { }
+  constructor(public payload: User) { }
 }
 
 export type All = | SetUser | CheckSession | CheckSessionFail | CheckSessionSuccess;
