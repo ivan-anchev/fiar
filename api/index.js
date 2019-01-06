@@ -48,7 +48,7 @@ const broadcastOpenChannels = (connection = null) => {
   };
 
   if (connection) {
-    connection.send(JSON.stringify(message));
+    connection.send(JSON.stringify({ message }));
   } else {
     CONNECTIONS.forEach((connection) => connection.send(JSON.stringify({ message })));
   }
