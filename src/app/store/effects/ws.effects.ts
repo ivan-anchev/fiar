@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState, selectIsConnected } from '../';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap, withLatestFrom, tap } from 'rxjs/operators';
 import { WsEvents } from '../../models/ws-events';
 import { Channel } from '../../models/channel';
 import { WsService } from '../../core/services/ws.service';
@@ -13,6 +14,7 @@ import {
   SetConnected,
   SetChannel,
   JoinChannel,
+  CreateChannel,
   LeaveChannel,
   SetOpenChannels,
   MessageReceive } from '../actions/ws.actions';
@@ -22,6 +24,7 @@ export class WSEffects {
   constructor(
     private _actions: Actions,
     private _ws: WsService,
+    private _router: Router,
     private _store: Store<AppState>) {}
 
   @Effect()
@@ -36,11 +39,13 @@ export class WSEffects {
       }
 
       return this._ws.connect(payload).pipe(
-        map(message => {
-          const { data, event } = message;
+        map(eventData => {
+          console.log(eventData);
+          const { data, event } = eventData;
           let dispatchAction;
           if (event instanceof MessageEvent) {
-            dispatchAction = new MessageReceive({ message: data });
+            const { message } = data;
+            dispatchAction = new MessageReceive({ message });
           } else {
             const isConnected = !(event instanceof CloseEvent);
             dispatchAction = new SetConnected({ isConnected });
@@ -66,10 +71,15 @@ export class WSEffects {
   @Effect()
   createChannel$: Observable<any> = this._actions.pipe(
     ofType(WSActions.CREATE_CHANNEL),
-    map((action: JoinChannel) => action.payload),
-    switchMap(({ channelName }) => {
-      return of(this._ws.createChannel(channelName)).pipe(
-        map((channel: Channel) => new SetChannel({ channel }))
+    map((action: CreateChannel) => action.payload),
+    switchMap(({ channelName, host }) => {
+      const channelConfig = {
+        maxSize: 2,
+        host
+      };
+      return of(this._ws.createChannel(channelName, channelConfig)).pipe(
+        map((channel: Channel) => new SetChannel({ channel })),
+        tap(() => this._router.navigate(['/game']))
       );
     })
   );

@@ -29,7 +29,7 @@ export class JoinChannel implements Action {
 
 export class CreateChannel implements Action {
   readonly type = WSActions.CREATE_CHANNEL;
-  constructor(public payload: { channelName: string }) { }
+  constructor(public payload: { channelName: string, host: string }) { }
 }
 
 export class LeaveChannel implements Action {

@@ -60,7 +60,7 @@ export class WsService {
     return { name: channelName, size: 2 };
   }
 
-  createChannel(channelName: string, channelConfig = { maxSize: 2}) {
+  createChannel(channelName: string, channelConfig = { maxSize: 2, host: '' }) {
     const { err } = this._canJoinChannel();
 
     if (err) {
@@ -69,7 +69,11 @@ export class WsService {
 
     this.channel = this.connection.join(channelName, channelConfig);
 
-    return { name: channelName, size: 1};
+    return {
+      name: channelName,
+      size: 1,
+      host: channelConfig.host
+    };
   }
 
   private _canJoinChannel() {
