@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../models/user';
+import uuid from 'uuid/v4';
 import { CoreModule } from '../core.module';
 
 // local storage key
@@ -19,7 +20,14 @@ export class UserService {
       return JSON.parse(userData);
     }
 
-    return { name: '', avatar: 'man' };
+    const user: User = {
+      id: uuid(),
+      name: '',
+      avatar: 'man',
+    };
+    this.saveCurrent(user);
+
+    return { name: '', avatar: 'man', id: uuid() };
   }
 
   /**
