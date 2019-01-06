@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HomeRoutingModule } from './home-routing.module';
+import { RootRoutingModule } from './root-routing.module';
 import {
   MatProgressSpinnerModule,
   MatIconModule,
@@ -12,14 +12,16 @@ import {
   MatListModule,
   MatRadioModule } from '@angular/material';
 
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './components/home/home.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ProfileEditorComponent } from './components/profile-editor/profile-editor.component';
+import { RootComponent } from './root/root.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    ProfileEditorComponent
+    ProfileEditorComponent,
+    RootComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,7 @@ import { ProfileEditorComponent } from './components/profile-editor/profile-edit
     MatProgressSpinnerModule,
     MatCardModule,
     MatButtonModule,
-    HomeRoutingModule
+    RootRoutingModule
   ]
 })
-export class HomeModule { }
+export class RootModule { }

@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import * as uuid from 'uuid/v4';
 import { Observable } from 'rxjs';
-import { User } from '../../../models/user';
-import { AppState } from '../../../store';
-import { Connect } from '../../../store/actions/ws.actions';
-import { SetProfileEditMode } from '../../../store/actions/ui.actions';
-import { CheckSession, SetUser } from '../../../store/actions/user.actions';
-import { selectIsConnected, selectIsSessionChecked, selectUser, selectIsProfileEditMode } from '../../../store';
+import { tap } from 'rxjs/operators';
+import { User } from '../../../../models/user';
+import { AppState } from '../../../../store';
+import { JoinChannel, CreateChannel} from '../../../../store/actions/ws.actions';
+import { SetProfileEditMode } from '../../../../store/actions/ui.actions';
+import { SetUser } from '../../../../store/actions/user.actions';
+import {
+  selectUser,
+  selectIsProfileEditMode } from '../../../../store';
 
 @Component({
   selector: 'fiar-home',
@@ -14,16 +18,6 @@ import { selectIsConnected, selectIsSessionChecked, selectUser, selectIsProfileE
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
-  /**
-   * Is user connected to WS
-   */
-  isConnected$: Observable<boolean>;
-
-  /**
-   * Is session check ready
-   */
-  isSessionCheckReady$: Observable<boolean>;
 
   /**
    * Is UI in profile edit mode
@@ -35,11 +29,19 @@ export class HomeComponent implements OnInit {
    */
   user$: Observable<User>;
 
+  user: User;
+
   constructor(private _store: Store<AppState>) {
-    this.isSessionCheckReady$ = this._store.select(selectIsSessionChecked);
-    this.isConnected$ = this._store.select(selectIsConnected);
-    this.user$ = this._store.select(selectUser);
+    this.user$ = this._store.select(selectUser).pipe(
+      tap(user => this.user = user)
+    );
     this.isProfileEditMode$ = this._store.select(selectIsProfileEditMode);
+  }
+
+  startGame() {
+    const channelName = uuid();
+    const host = this.user.id;
+    this._store.dispatch(new CreateChannel({ channelName, host }));
   }
 
   /**
@@ -55,12 +57,11 @@ export class HomeComponent implements OnInit {
    * @param  userData User
    */
   onProfileSubmit({ name, avatar }: User) {
-    this._store.dispatch(new SetUser({ name, avatar }));
+    const { id } = this.user;
+    this._store.dispatch(new SetUser({ id, name, avatar }));
     this._store.dispatch(new SetProfileEditMode({ isProfileEditMode: false }));
   }
 
   ngOnInit() {
-    // this._store.dispatch(new Connect({ name: 'George '}));
-    this._store.dispatch(new CheckSession);
   }
 }

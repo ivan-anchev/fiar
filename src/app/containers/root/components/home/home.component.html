@@ -1,14 +1,7 @@
 <div class="mat-typography">
-  <mat-card *ngIf="!(isSessionCheckReady$ | async); else content;">
-    <mat-spinner></mat-spinner>
-    <h5 class="text--center">Loading...</h5>
-  </mat-card>
-
-
-  <ng-template #content>
     <ng-container *ngTemplateOutlet="(isProfileEditMode$ | async) ? editTemplate : menuTemplate; context: {$implicit: isProfileEditMode$ | async }">
     </ng-container>
-
+    <!-- Edit Profile Template -->
     <ng-template #editTemplate let-isProfileEditMode>
       <fiar-profile-editor
         [user]="user$ | async"
@@ -17,6 +10,7 @@
       </fiar-profile-editor>
     </ng-template>
 
+    <!--  Menu Template (start/join game)-->
     <ng-template #menuTemplate let-isProfileEditMode>
       <mat-card *ngIf="(user$ | async) as user">
         <mat-card-content>
@@ -32,12 +26,9 @@
         <mat-divider></mat-divider>
 
         <mat-card-actions>
-          <button mat-raised-button color="accent">START GAME</button>
+          <button mat-raised-button (click)="startGame()"color="accent">START GAME</button>
           <button mat-button color="accent">JOIN GAME</button>
         </mat-card-actions>
       </mat-card>
     </ng-template>
-
-  </ng-template>
-
 </div>
