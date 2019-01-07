@@ -75,9 +75,8 @@ export const createClient = (host: string, port: number) => {
     const join = (channelName: string, channelConfig = { maxSize: Number.MAX_SAFE_INTEGER }) => {
       const userLeft = new Subject();
       const channelDownstream = downstream.pipe(
-        filter(resp => (
-          resp.data && resp.data.channel.name === channelName
-        )),
+        filter(resp =>
+          resp.data && resp.data.channel && resp.data.channel.name === channelName),
         takeUntil(userLeft)
       );
 
