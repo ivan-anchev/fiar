@@ -69,9 +69,10 @@ const leaveChannel = (channelName, connection) => {
     if (error) {
       return connection.send(getError(channelName, error));
     }
+
     channel.connections.delete(connection);
     if (channel.connections.size === 0) {
-      CHANNELS.delete(channel);
+      CHANNELS.delete(channelName);
     }
 }
 const getChannel = (channelConfig) => {
