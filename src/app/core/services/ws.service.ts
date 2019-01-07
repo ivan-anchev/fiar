@@ -56,8 +56,12 @@ export class WsService {
     }
 
     this.channel = this.connection.join(channelName, { maxSize: 2});
-
-    return { name: channelName, size: 2 };
+    const { downstream } = this.channel;
+    return {
+      name: channelName,
+      size: 2,
+      downstream
+    };
   }
 
   createChannel(channelName: string, channelConfig = { maxSize: 2, host: '' }) {
@@ -66,13 +70,14 @@ export class WsService {
     if (err) {
       throw err;
     }
-
+    console.log(channelName, channelConfig);
     this.channel = this.connection.join(channelName, channelConfig);
 
+    const { downstream } = this.channel;
     return {
+      downstream,
       name: channelName,
-      size: 1,
-      host: channelConfig.host
+      size: 1
     };
   }
 

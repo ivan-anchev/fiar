@@ -46,6 +46,10 @@ export const selectIsConnected = createSelector(
   selectWsState,
   (wsState: ws.WSState) => wsState.isConnected
 );
+export const selectOpenChannels = createSelector(
+  selectWsState,
+  (wsState:  ws.WSState) => wsState.openChannels
+);
 
 // #User
 export const selectUserState = createFeatureSelector<AppState, user.UserState>('user');

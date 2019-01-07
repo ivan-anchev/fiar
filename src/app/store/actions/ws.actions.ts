@@ -9,7 +9,13 @@ export enum WSActions {
   LEAVE_CHANNEL = '[WS] LEAVE_CHANNEL',
   SET_CHANNEL = '[WS] SET_CHANNEL',
   MESSAGE_RECEIVE = '[WS] MESSAGE_RECEIVE',
-  SET_OPEN_CHANNELS = '[WS] SET_OPEN_CHANNELS'
+  CHANNEL_MESSAGE_RECEIVE = '[WS] CHANNEL_MESSAGE_RECEIVE',
+  SET_OPEN_CHANNELS = '[WS] SET_OPEN_CHANNELS',
+  NOOP_ACTION = '[WS] NOOP_ACTIONS'
+}
+
+export class NoopAction implements Action {
+  readonly type = WSActions.NOOP_ACTION;
 }
 
 export class Connect implements Action {
@@ -39,7 +45,7 @@ export class LeaveChannel implements Action {
 
 export class SetChannel implements Action {
   readonly type = WSActions.SET_CHANNEL;
-  constructor(public payload: { channel: Channel }) { }
+  constructor(public payload: { channel }) { }
 }
 
 export class MessageReceive implements Action {
@@ -47,9 +53,22 @@ export class MessageReceive implements Action {
   constructor(public payload: { message }) { }
 }
 
+export class ChannelMessageReceive implements Action {
+  readonly type = WSActions.CHANNEL_MESSAGE_RECEIVE;
+  constructor(public payload: { message, channel, meta }) { }
+}
+
 export class SetOpenChannels implements Action {
   readonly type = WSActions.SET_OPEN_CHANNELS;
   constructor(public payload: { openChannels: Array<string> }) { }
 }
 
-export type All = Connect | SetConnected | JoinChannel | CreateChannel | LeaveChannel | SetChannel | MessageReceive | SetOpenChannels;
+export type All = Connect
+  | SetConnected
+  | JoinChannel
+  | CreateChannel
+  | LeaveChannel
+  | SetChannel
+  | MessageReceive
+  | ChannelMessageReceive
+  | SetOpenChannels;
