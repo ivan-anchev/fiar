@@ -69,6 +69,14 @@ $player-two-color: #8fbc8f;;
         background-image: url('./assets/woman.svg');
     }
 }
+
+.flc-game-board-replacement {
+  @extend .flc-game-board;
+  border: 0px !important;
+  box-shadow: none !important;
+  flex-direction: column !important;
+}
+
 .flc-game-board {
     box-sizing: border-box;
     border: 1px solid #ccc;
@@ -79,6 +87,15 @@ $player-two-color: #8fbc8f;;
     width: $total-piece-size * 7;
     background: #fff;
     box-shadow: inset 0 0px 10px rgba(0,0,0,0.1);
+
+    &.board-loading {
+      border: 0px;
+      box-shadow: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
     > .board-col {
         box-sizing: border-box;
         height: 100%;

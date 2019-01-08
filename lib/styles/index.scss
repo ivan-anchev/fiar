@@ -46,6 +46,14 @@ body { display: block; }
 }
 
 .flc-margin {
+  &--clear {
+    margin: 0px;
+  }
+
+  &--smaller {
+    margin: 10px;
+  }
+
   &--small {
     margin: 16px;
   }
@@ -68,6 +76,12 @@ body { display: block; }
   }
 }
 
+.flc-typography {
+  &--caption-color {
+    color: rgba(0,0,0,0.54);
+  }
+}
+
 .flc-color {
   &--muted {
     color: rgba(0,0,0,.6);
@@ -80,6 +94,16 @@ body { display: block; }
   }
 }
 
+.flc-padding {
+  &--large {
+    padding: 50px !important;
+  }
+
+  &--small-right {
+    padding-right: 20px;
+  }
+}
+
 .flc-card {
     &-main {
         margin: 10px;
@@ -89,6 +113,5 @@ body { display: block; }
         margin: 10px;
         padding: 10px;
         box-sizing: border-box;
-        width: 390px;
     }
 }

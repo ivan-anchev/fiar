@@ -20,6 +20,7 @@ import {
   SetOpenChannels,
   MessageReceive,
   ChannelMessageReceive } from '../actions/ws.actions';
+import { GameAction } from '../../containers/game/store/actions/feature.actions';
 
 @Injectable()
 export class WSEffects {
@@ -98,6 +99,14 @@ export class WSEffects {
       payload.channel.downstream.pipe(
         map(({ data }) => new ChannelMessageReceive({ ...data }))
       ))
+  );
+
+  // Test
+  @Effect()
+  ChannelMessageReceive$: Observable<any> = this._actions.pipe(
+    ofType(WSActions.CHANNEL_MESSAGE_RECEIVE),
+    map((action: ChannelMessageReceive) => action.payload),
+    switchMap(payload => of(new GameAction(payload))) // Send action to game feature
   );
 
   @Effect()

@@ -1,6 +1,6 @@
 export interface GameState {
   board: Array<any>;
-  currentPlayer: 0 | 1;
+  currentPlayer: 'string';
 }
 
 export const initialState: GameState = {

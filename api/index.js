@@ -129,10 +129,12 @@ WS_SERVER.on('request', request => {
 
         if (isJoinChannelEvent(message)) {
           let { error } = joinChannel(message, connection);
-          broadcastOpenChannels();
+
           if (error) {
               return connection.send(getError(channelName, error));
           }
+
+          broadcastOpenChannels();
         }
 
         if (isLeaveChannelEvent(message)) {

@@ -25,7 +25,17 @@ export const selectPlayerState = createSelector(
   createFeatureSelector<players.PlayerState>('players')
 );
 
+export const selectPlayersAll = createSelector(
+  selectPlayerState,
+  selectAll
+);
+
 export const selectPlayersTotal = createSelector(
   selectPlayerState,
   selectTotal
+);
+
+export const selectPlayersReady = createSelector(
+  selectPlayersTotal,
+  (playerCount: number) => playerCount === 2
 );

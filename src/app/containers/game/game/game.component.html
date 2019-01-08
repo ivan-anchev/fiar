@@ -1,3 +1,73 @@
-<p>
-  {{totalPlayers$ | async}}
-</p>
+<div class="flc-layout--center">
+
+  <mat-card class="flc-margin--smaller flc-padding--large">
+    <mat-card-content>
+
+      <fiar-board *ngIf="playersReady$ | async ">
+        <fiar-board-col (click)="test()">
+          <fiar-piece *ngFor="let piece of pieces;" [playerIndex]="piece"></fiar-piece>
+        </fiar-board-col>
+
+        <fiar-board-col>
+        </fiar-board-col>
+
+        <fiar-board-col>
+        </fiar-board-col>
+
+        <fiar-board-col>
+        </fiar-board-col>
+
+        <fiar-board-col>
+        </fiar-board-col>
+
+        <fiar-board-col>
+        </fiar-board-col>
+
+        <fiar-board-col>
+        </fiar-board-col>
+      </fiar-board>
+
+      <div *ngIf="!(playersReady$ | async)" class="flc-game-board board-loading">
+        <span class="mat-h3">Searching for an opponent</span>
+        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+  <mat-card class="flc-card-aside">
+    <mat-card-content class="flc-padding--small-right">
+      <div *ngIf="(players$ | async) as players">
+        <div *ngFor="let player of players; let i = index;">
+          <div class="flc-game-avatar-group">
+            <fiar-avatar [type]="player.avatar" [index]="i">
+            </fiar-avatar>
+
+            <span *ngIf="player.name" class="mat-h3">
+              {{player.name}}
+            </span>
+
+            <span *ngIf="!player.name" class="mat-h3">
+              Player {{ i ? 'Two' : 'One' }}
+              <i *ngIf="player.isCurrent" class="mdl-typography--caption-color-contrast">(you)</i>
+            </span>
+
+          </div>
+        </div>
+
+        <div *ngIf="(playersTotal$ | async) === 1">
+          <div class="flc-game-avatar-group">
+            <fiar-avatar></fiar-avatar>
+            <div class="flc-layout--column">
+              <span class="mat-h3 flc-margin--clear">Player two</span>
+              <i class="mdl-typography--caption-color-contrast">(waiting to join)</i>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
