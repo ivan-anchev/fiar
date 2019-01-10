@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState, selectChannelUsers } from '../../../store';
 import {
   selectBoard,
-  selectPlayersReady,
   selectPlayersAll,
   selectPlayersTotal,
-  selectCurrentPlayer
+  selectCurrentPlayer,
+  selectIsPlayersTurn
 } from '../store';
 import { StartGame } from '../store/actions/feature.actions';
 import { User } from '../../../models/user';
@@ -19,8 +19,6 @@ import { User } from '../../../models/user';
 })
 export class GameComponent implements OnInit {
 
-  playersReady$: Observable<boolean>;
-
   players$: Observable<Array<User>>;
 
   playersTotal$: Observable<number>;
@@ -31,12 +29,16 @@ export class GameComponent implements OnInit {
 
   currentPlayer$: Observable<string>;
 
+  isPlayersTurn$: Observable<(id: string) => boolean>;
+
   constructor(private _store: Store<AppState>) {
-    this.playersReady$ = this._store.select(selectPlayersReady);
     this.playersTotal$ = this._store.select(selectPlayersTotal);
     this.players$ = this._store.select(selectPlayersAll);
     this.board$ = this._store.select(selectBoard);
     this.currentPlayer$ = this._store.select(selectCurrentPlayer);
+    this.isPlayersTurn$ = this._store.pipe(
+      select(selectIsPlayersTurn)
+    );
   }
 
   ngOnInit() {

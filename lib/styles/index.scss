@@ -50,6 +50,10 @@ body { display: block; }
     margin: 0px;
   }
 
+  &--clear-top {
+    margin-top: 0px;
+  }
+
   &--smaller {
     margin: 10px;
   }
@@ -99,8 +103,21 @@ body { display: block; }
     padding: 50px !important;
   }
 
+  &--clear {
+    padding: 0px;
+  }
+
+  &--clear-top {
+    padding-top: 0px !important;
+  }
+
   &--small-right {
     padding-right: 20px;
+  }
+
+  &--small-vertical {
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 }
 

@@ -8,7 +8,9 @@ import { GameComponent } from './game/game.component';
 import { GameFeatureEffects } from './store/effects/feature.effects';
 import {
   MatCardModule,
-  MatProgressBarModule } from '@angular/material';
+  MatProgressBarModule,
+  MatButtonModule,
+  MatDividerModule } from '@angular/material';
 import { SharedModule } from '../../shared/shared.module';
 
 import { PlayerEffects } from './store/effects/player.effects';
@@ -21,6 +23,8 @@ import { PieceComponent } from './components/piece/piece.component';
     CommonModule,
     MatCardModule,
     MatProgressBarModule,
+    MatButtonModule,
+    MatDividerModule,
     SharedModule,
     StoreModule.forFeature('gameFeature', reducers),
     EffectsModule.forFeature([PlayerEffects, GameFeatureEffects]),

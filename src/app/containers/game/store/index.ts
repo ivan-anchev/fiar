@@ -37,6 +37,11 @@ export const selectCurrentPlayer = createSelector(
   (gameState: game.GameState) => gameState.currentPlayer
 );
 
+export const selectIsPlayersTurn = createSelector(
+  selectCurrentPlayer,
+  currentPlayerID => (id: string) => currentPlayerID === id
+);
+
 // Players
 export const selectPlayerState = createSelector(
   selectGameFeature,

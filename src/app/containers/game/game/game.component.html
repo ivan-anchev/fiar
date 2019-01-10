@@ -1,4 +1,4 @@
-<div class="flc-layout--center">
+<div class="flc-layout--center game">
 
   <mat-card class="flc-margin--smaller flc-padding--large">
     <mat-card-content>
@@ -14,13 +14,13 @@
   </mat-card>
 
   <mat-card class="flc-card-aside">
-    <mat-card-content class="flc-padding--small-right">
-      <div *ngIf="(players$ | async) as players">
+    <mat-card-content>
+      <div class="flc-padding--small-right" *ngIf="(players$ | async) as players">
         <div *ngFor="let player of players; let i = index;">
           <div class="flc-game-avatar-group">
             <fiar-avatar
               [type]="player.avatar"
-              [state]="(currentPlayer$ | async) === player.id ? 'their-turn' : ''"
+              [state]="(isPlayersTurn$ | async)(player.id) ? 'their-turn' : ''"
               [index]="i">
             </fiar-avatar>
 
@@ -35,19 +35,22 @@
 
           </div>
         </div>
-
-        <div *ngIf="(playersTotal$ | async) === 1">
-          <div class="flc-game-avatar-group">
-            <fiar-avatar></fiar-avatar>
-            <div class="flc-layout--column">
-              <span class="mat-h3 flc-margin--clear">Player two</span>
-              <i class="mdl-typography--caption-color-contrast">(waiting to join)</i>
-            </div>
-
-          </div>
-        </div>
-
       </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="status-bar">
+        <span class="mat-body-2 flc-typography--caption-color flc--animation-slide-right">Your turn</span>
+      </div>
+
+
+
     </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions>
+      <button mat-button color="warn">SURRENDER</button>
+    </mat-card-actions>
   </mat-card>
 </div>
