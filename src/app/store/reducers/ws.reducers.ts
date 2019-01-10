@@ -30,6 +30,14 @@ export function reducer(state = initialWSState, action: All) {
         ...state,
         openChannels: action.payload.openChannels
       };
+    case WSActions.ADD_CHANNEL_USER:
+      return {
+        ...state,
+        channel: {
+          ...state.channel,
+          users: state.channel.users.add(action.payload.user)
+        }
+      };
     default:
       return state;
   }

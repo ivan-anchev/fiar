@@ -20,6 +20,24 @@ export const {
 } = players.playerAdapter.getSelectors();
 
 export const selectGameFeature = createFeatureSelector<GameFeatureState>('gameFeature');
+
+// Game
+export const selectGameState = createSelector(
+  selectGameFeature,
+  createFeatureSelector<game.GameState>('game')
+);
+
+export const selectBoard = createSelector(
+  selectGameState,
+  (gameState: game.GameState) => gameState.board
+);
+
+export const selectCurrentPlayer = createSelector(
+  selectGameState,
+  (gameState: game.GameState) => gameState.currentPlayer
+);
+
+// Players
 export const selectPlayerState = createSelector(
   selectGameFeature,
   createFeatureSelector<players.PlayerState>('players')

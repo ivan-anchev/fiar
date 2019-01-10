@@ -11,7 +11,9 @@ export enum WSActions {
   MESSAGE_RECEIVE = '[WS] MESSAGE_RECEIVE',
   CHANNEL_MESSAGE_RECEIVE = '[WS] CHANNEL_MESSAGE_RECEIVE',
   SET_OPEN_CHANNELS = '[WS] SET_OPEN_CHANNELS',
-  NOOP_ACTION = '[WS] NOOP_ACTIONS'
+  HANDSHAKE = '[WS] HANDSHAKE',
+  NOOP_ACTION = '[WS] NOOP_ACTIONS',
+  ADD_CHANNEL_USER = '[WS] ADD_CHANNEL_USER'
 }
 
 export class NoopAction implements Action {
@@ -26,6 +28,10 @@ export class Connect implements Action {
 export class SetConnected implements Action {
   readonly type = WSActions.SET_CONNECTED;
   constructor(public payload: { isConnected }) { }
+}
+
+export class Handshake implements Action {
+  readonly type = WSActions.HANDSHAKE;
 }
 
 export class JoinChannel implements Action {
@@ -63,7 +69,13 @@ export class SetOpenChannels implements Action {
   constructor(public payload: { openChannels: Array<string> }) { }
 }
 
+export class AddChannelUser implements Action {
+  readonly type = WSActions.ADD_CHANNEL_USER;
+  constructor(public payload: { user }) { }
+}
+
 export type All = Connect
+  | Handshake
   | SetConnected
   | JoinChannel
   | CreateChannel
@@ -71,4 +83,5 @@ export type All = Connect
   | SetChannel
   | MessageReceive
   | ChannelMessageReceive
+  | AddChannelUser
   | SetOpenChannels;

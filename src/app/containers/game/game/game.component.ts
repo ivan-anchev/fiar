@@ -1,10 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { AppState, selectUser } from '../../../store';
-import { selectPlayersReady, selectPlayersAll, selectPlayersTotal } from '../store';
-import { Add } from '../store/actions/player.actions';
+import { AppState, selectChannelUsers } from '../../../store';
+import {
+  selectBoard,
+  selectPlayersReady,
+  selectPlayersAll,
+  selectPlayersTotal,
+  selectCurrentPlayer
+} from '../store';
+import { StartGame } from '../store/actions/feature.actions';
 import { User } from '../../../models/user';
 
 @Component({
@@ -22,22 +27,21 @@ export class GameComponent implements OnInit {
 
   user$: Observable<User>;
 
-  pieces = [0];
+  board$: Observable<any>;
+
+  currentPlayer$: Observable<string>;
 
   constructor(private _store: Store<AppState>) {
     this.playersReady$ = this._store.select(selectPlayersReady);
     this.playersTotal$ = this._store.select(selectPlayersTotal);
     this.players$ = this._store.select(selectPlayersAll);
-  }
-
-  test() {
-    this.pieces.unshift(1);
+    this.board$ = this._store.select(selectBoard);
+    this.currentPlayer$ = this._store.select(selectCurrentPlayer);
   }
 
   ngOnInit() {
-    // Add current user to players
-    this._store.select(selectUser).pipe(
-      take(1)
-    ).subscribe(player => this._store.dispatch(new Add({ player: { ...player, isCurrent: true } })));
+    this._store.select(selectChannelUsers).subscribe((users) => {
+      this._store.dispatch(new StartGame({ players: users }));
+    });
   }
 }

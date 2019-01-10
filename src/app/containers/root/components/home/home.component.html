@@ -12,22 +12,34 @@
 
     <!--  Menu Template (start/join game)-->
     <ng-template #menuTemplate let-isProfileEditMode>
-      <mat-card *ngIf="(user$ | async) as user">
+      <mat-card *ngIf="(user$ | async) as user" class="flc-card-fixed">
         <mat-card-content>
-          <div class="flc-layout--center-middle flex--column">
+          <!-- Static menu -->
+          <div *ngIf="!(isWaitingForPlayer$ | async)" class="flc-layout--center-middle flex--column">
             <fiar-avatar [type]="user.avatar" isActive="true"></fiar-avatar>
             <span class="mat-h2 margin--clear flc-layout--column-middle">
                 {{user.name || 'You'}}
                 <button mat-stroked-button (click)="setProfileEditMode(!isProfileEditMode)"><small>Edit Profile</small></button>
             </span>
           </div>
+          <!-- Waiting for player to join -->
+          <div *ngIf="isWaitingForPlayer$ | async" class="flc-layout--center-middle flex--column">
+            <mat-spinner color="accent"></mat-spinner>
+            <span class="mat-body flc-margin--small-top">Waiting for player to join...</span>
+          </div>
         </mat-card-content>
 
         <mat-divider></mat-divider>
 
         <mat-card-actions>
-          <button mat-raised-button (click)="startGame()"color="accent">START GAME</button>
-          <button mat-button color="accent" (click)="joinGame()">JOIN GAME</button>
+          <div *ngIf="!(isWaitingForPlayer$ | async)">
+            <button mat-raised-button (click)="startGame()"color="accent">START GAME</button>
+            <button mat-button color="accent" (click)="joinGame()">JOIN GAME</button>
+          </div>
+
+          <div *ngIf="isWaitingForPlayer$ | async">
+            <button mat-button>Cancel</button>
+          </div>
         </mat-card-actions>
       </mat-card>
     </ng-template>

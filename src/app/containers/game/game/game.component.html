@@ -3,34 +3,11 @@
   <mat-card class="flc-margin--smaller flc-padding--large">
     <mat-card-content>
 
-      <fiar-board *ngIf="playersReady$ | async ">
-        <fiar-board-col (click)="test()">
-          <fiar-piece *ngFor="let piece of pieces;" [playerIndex]="piece"></fiar-piece>
-        </fiar-board-col>
-
-        <fiar-board-col>
-        </fiar-board-col>
-
-        <fiar-board-col>
-        </fiar-board-col>
-
-        <fiar-board-col>
-        </fiar-board-col>
-
-        <fiar-board-col>
-        </fiar-board-col>
-
-        <fiar-board-col>
-        </fiar-board-col>
-
-        <fiar-board-col>
+      <fiar-board>
+        <fiar-board-col *ngFor="let column of board$ | async">
+          <fiar-piece *ngFor="let piece of column"></fiar-piece>
         </fiar-board-col>
       </fiar-board>
-
-      <div *ngIf="!(playersReady$ | async)" class="flc-game-board board-loading">
-        <span class="mat-h3">Searching for an opponent</span>
-        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
-      </div>
 
     </mat-card-content>
 
@@ -41,7 +18,10 @@
       <div *ngIf="(players$ | async) as players">
         <div *ngFor="let player of players; let i = index;">
           <div class="flc-game-avatar-group">
-            <fiar-avatar [type]="player.avatar" [index]="i">
+            <fiar-avatar
+              [type]="player.avatar"
+              [state]="(currentPlayer$ | async) === player.id ? 'their-turn' : ''"
+              [index]="i">
             </fiar-avatar>
 
             <span *ngIf="player.name" class="mat-h3">

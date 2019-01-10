@@ -5,7 +5,13 @@ import { PlayerActionTypes, All } from '../actions/player.actions';
 export interface PlayerState extends EntityState<User> {
 }
 
-export const playerAdapter = createEntityAdapter<User>();
+// Channel(game) host is always first
+const sortFn = (a: User, b: User) => a.isHost ? -1 : 1;
+
+export const playerAdapter = createEntityAdapter<User>({
+  sortComparer: sortFn
+});
+
 export const initialState: PlayerState = playerAdapter.getInitialState();
 
 export function reducer(state = initialState, action: All) {
@@ -14,6 +20,8 @@ export function reducer(state = initialState, action: All) {
       return playerAdapter.addOne(action.payload.player, state);
     case PlayerActionTypes.DELETE:
       return playerAdapter.removeOne(action.payload.id, state);
+    case PlayerActionTypes.ADD_ALL:
+      return playerAdapter.addAll(action.payload.players, state);
     default: return state;
   }
 }

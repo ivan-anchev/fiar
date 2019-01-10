@@ -18,8 +18,7 @@ export class PlayerEffects {
     ofType(PlayerActionTypes.PLAYER_JOINED),
     map((action: PlayerJoined) => action.payload),
     withLatestFrom(this._store.select(selectPlayersAll)),
-    switchMap(([payload, players]) => {
-      console.log(players);
+    switchMap(([ payload, players ]) => {
       const { player } = payload;
       return of(new Add({ player }));
     })

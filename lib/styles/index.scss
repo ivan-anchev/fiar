@@ -105,6 +105,10 @@ body { display: block; }
 }
 
 .flc-card {
+    &-fixed {
+      width: 225px;
+    }
+
     &-main {
         margin: 10px;
         width: 100%;

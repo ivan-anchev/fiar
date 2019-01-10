@@ -57,27 +57,35 @@ export class WsService {
 
     this.channel = this.connection.join(channelName, { maxSize: 2});
     const { downstream } = this.channel;
+
     return {
       name: channelName,
-      size: 2,
-      downstream
+      downstream,
+      users: new Set()
     };
+  }
+
+  send(message: unknown) {
+    this.channel.send(message);
   }
 
   createChannel(channelName: string, channelConfig = { maxSize: 2, host: '' }) {
     const { err } = this._canJoinChannel();
+    const { host } = channelConfig;
 
     if (err) {
       throw err;
     }
-    console.log(channelName, channelConfig);
+
     this.channel = this.connection.join(channelName, channelConfig);
 
     const { downstream } = this.channel;
+
     return {
       downstream,
+      host,
       name: channelName,
-      size: 1
+      users: new Set()
     };
   }
 

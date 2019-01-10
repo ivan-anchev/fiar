@@ -24,7 +24,6 @@ export class BoardColComponent implements OnInit, OnDestroy, AfterContentInit {
     this.pieces.changes.pipe(
       takeUntil(this._destroyed$)
     ).subscribe(change => console.log(change));
-    // console.log(this.pieces);
   }
 
   ngOnDestroy() {

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { GameFeatureActionTypes, GameAction } from '../actions/feature.actions';
-import { PlayerJoined } from '../actions/player.actions';
+import { GameFeatureActionTypes, GameAction, StartGame } from '../actions/feature.actions';
+import { SetPlayerTurn } from '../actions/game.actions';
+import { PlayerJoined, AddAll } from '../actions/player.actions';
 import { EventTypes } from '../event-types';
 
 @Injectable()
@@ -17,16 +18,29 @@ export class GameFeatureEffects {
     switchMap((payload) => {
       const { message, channel, meta } = payload;
       const { type } = message;
-      let dispatchAction;
+      let dispatch;
 
       switch (type) {
         case EventTypes.JOIN_CHANNEL:
-          dispatchAction = new PlayerJoined({ player: meta });
+          dispatch = new PlayerJoined({ player: meta });
+          break;
+        case EventTypes.HANDSHAKE:
+          dispatch = new PlayerJoined({ player: meta });
           break;
         default: break;
       }
 
-      return of(dispatchAction);
+      return of(dispatch);
     })
+  );
+
+  @Effect()
+  startGame$: Observable<any> = this._actions.pipe(
+    ofType(GameFeatureActionTypes.START_GAME),
+    map((action: StartGame ) => action.payload),
+    switchMap(({ players }) => [
+      new AddAll({ players }),
+      new SetPlayerTurn({ id: players.find(p => p.isHost ).id })
+    ])
   );
 }

@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
 
 export enum GameFeatureActionTypes {
-  GAME_ACTION = '[Game] GAME_ACTION'
+  GAME_ACTION = '[Game] GAME_ACTION',
+  START_GAME = '[GAME] START_GAME'
 }
 
 export class GameAction implements Action {
@@ -9,4 +10,9 @@ export class GameAction implements Action {
   constructor(public payload) { }
 }
 
-export type All = GameAction;
+export class StartGame implements Action {
+  readonly type = GameFeatureActionTypes.START_GAME;
+  constructor(public payload: { players }) { }
+}
+
+export type All = GameAction | StartGame;

@@ -11,7 +11,8 @@ import { SetUser } from '../../../../store/actions/user.actions';
 import {
   selectOpenChannels,
   selectUser,
-  selectIsProfileEditMode } from '../../../../store';
+  selectIsProfileEditMode ,
+  selectIsWaitingForPlayer } from '../../../../store';
 
 @Component({
   selector: 'fiar-home',
@@ -29,6 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Current user obs
    */
   user$: Observable<User>;
+
+  isWaitingForPlayer$: Observable<boolean>;
 
   /**
    * Current user object
@@ -51,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       tap(user => this.user = user)
     );
     this.isProfileEditMode$ = this._store.select(selectIsProfileEditMode);
+    this.isWaitingForPlayer$ = this._store.select(selectIsWaitingForPlayer);
     this._store.select(selectOpenChannels).pipe(
       takeUntil(this._destroyed$)
     ).subscribe(openChannels => this.openChannels = openChannels);

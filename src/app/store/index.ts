@@ -50,6 +50,15 @@ export const selectOpenChannels = createSelector(
   selectWsState,
   (wsState:  ws.WSState) => wsState.openChannels
 );
+export const selectChannel = createSelector(
+  selectWsState,
+  (wsState: ws.WSState) => wsState.channel
+);
+export const selectChannelUsers = createSelector(
+  selectChannel,
+  (channel) => channel ? Array.from(channel.users) : []
+);
+
 
 // #User
 export const selectUserState = createFeatureSelector<AppState, user.UserState>('user');
@@ -60,4 +69,10 @@ export const selectIsSessionChecked = createSelector(
 export const selectUser = createSelector(
   selectUserState,
   (userState: user.UserState) => userState.user
+);
+
+export const selectIsWaitingForPlayer = createSelector(
+  selectChannel,
+  selectUser,
+  (channel, currentUser) => channel && channel.host === currentUser.id && channel.users.size === 1
 );

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState, selectIsConnected } from '../';
+import { AppState, selectIsConnected, selectUser, selectChannelUsers } from '../';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, withLatestFrom, tap, filter } from 'rxjs/operators';
 import { WsEvents } from '../../models/ws-events';
@@ -17,10 +17,12 @@ import {
   JoinChannel,
   CreateChannel,
   LeaveChannel,
+  AddChannelUser,
+  Handshake,
   SetOpenChannels,
   MessageReceive,
   ChannelMessageReceive } from '../actions/ws.actions';
-import { GameAction } from '../../containers/game/store/actions/feature.actions';
+import { GameAction, StartGame } from '../../containers/game/store/actions/feature.actions';
 
 @Injectable()
 export class WSEffects {
@@ -70,7 +72,11 @@ export class WSEffects {
     map((action: JoinChannel) => action.payload),
     switchMap(({ channelName }) => {
       return of(this._ws.joinChannel(channelName)).pipe(
-        map((channel) => new SetChannel({ channel }))
+        withLatestFrom(this._store.select(selectUser)),
+        switchMap(([ channel, user ]) => [
+            new SetChannel({ channel }),
+            new AddChannelUser(({ user: {...user, isHost: false} }))
+          ])
       );
     })
   );
@@ -80,13 +86,21 @@ export class WSEffects {
     ofType(WSActions.CREATE_CHANNEL),
     map((action: CreateChannel) => action.payload),
     switchMap(({ channelName, host }) => {
+
       const channelConfig = {
         maxSize: 2,
         host
       };
+
       return of(this._ws.createChannel(channelName, channelConfig)).pipe(
-        map((channel) => new SetChannel({ channel })),
-        tap(() => this._router.navigate(['/game']))
+        withLatestFrom(this._store.select(selectUser)),
+        switchMap(([channel, user]) => {
+          return [
+            new SetChannel({ channel }),
+            new AddChannelUser({ user: { ...user, isHost: true } })
+          ];
+        })
+        // tap(() => this._router.navigate(['/game']))
       );
     })
   );
@@ -101,12 +115,48 @@ export class WSEffects {
       ))
   );
 
-  // Test
+  @Effect({ dispatch: false })
+  handshake$: Observable<any> = this._actions.pipe(
+    ofType(WSActions.HANDSHAKE),
+    switchMap(() => of(this._ws.send({ type: 'HANDSHAKE', accept: true })))
+  );
+
   @Effect()
-  ChannelMessageReceive$: Observable<any> = this._actions.pipe(
+  channelMessageReceive$: Observable<any> = this._actions.pipe(
     ofType(WSActions.CHANNEL_MESSAGE_RECEIVE),
     map((action: ChannelMessageReceive) => action.payload),
-    switchMap(payload => of(new GameAction(payload))) // Send action to game feature
+    withLatestFrom(this._store.select(selectChannelUsers)),
+    switchMap(([ payload, channelUsers ]) => {
+      const { message, meta } = payload;
+      const { type } = message;
+
+      let ret;
+
+      switch (type) {
+        case 'JOIN_CHANNEL':
+
+          this._router.navigate(['/game']);
+
+          ret = [
+            new AddChannelUser({ user: meta }),
+            new Handshake
+          ];
+
+          break;
+        case 'HANDSHAKE':
+          this._router.navigate(['/game']);
+
+          ret = [
+            new AddChannelUser({ user: {...meta, isHost: true } })
+          ];
+          break;
+        default:
+          ret = of(new GameAction(payload));
+          break;
+      }
+
+      return ret;
+    })
   );
 
   @Effect()
@@ -114,7 +164,6 @@ export class WSEffects {
     ofType(WSActions.MESSAGE_RECEIVE),
     map((action: MessageReceive ) => action.payload),
     switchMap(({ message: { type, payload } }) => {
-      console.log(type, payload);
       let dispatchAction;
       switch (type) {
         case WsEvents.BROADCAST_OPEN_CHANNELS:
