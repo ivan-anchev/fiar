@@ -75,7 +75,7 @@ export class WSEffects {
         withLatestFrom(this._store.select(selectUser)),
         switchMap(([ channel, user ]) => [
             new SetChannel({ channel }),
-            new AddChannelUser(({ user: {...user, isHost: false} }))
+            new AddChannelUser(({ user: { ...user, isHost: false, isClient: true } }))
           ])
       );
     })
@@ -97,7 +97,7 @@ export class WSEffects {
         switchMap(([channel, user]) => {
           return [
             new SetChannel({ channel }),
-            new AddChannelUser({ user: { ...user, isHost: true } })
+            new AddChannelUser({ user: { ...user, isHost: true, isClient: true } })
           ];
         })
         // tap(() => this._router.navigate(['/game']))

@@ -1,34 +1,22 @@
-import { Component, OnInit, OnDestroy, AfterContentInit, HostBinding, ContentChildren, QueryList } from '@angular/core';
-import { PieceComponent } from '../piece/piece.component';
-import { Observable, ReplaySubject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { Component, Input, OnInit, HostBinding } from '@angular/core';
+
 @Component({
   selector: 'fiar-board-col',
   templateUrl: './board-col.component.html',
   styleUrls: ['./board-col.component.scss']
 })
-export class BoardColComponent implements OnInit, OnDestroy, AfterContentInit {
+export class BoardColComponent implements OnInit {
 
   @HostBinding('class') boardColClass = 'board-col';
 
-  @ContentChildren(PieceComponent) pieces: QueryList<PieceComponent>;
+  @HostBinding('class.disabled') get disabledClass() {
+    return this.disabled;
+  }
 
-  private _destroyed$ = new ReplaySubject<boolean>(1);
+  @Input() disabled: boolean;
 
   constructor() { }
 
   ngOnInit() {
   }
-
-  ngAfterContentInit() {
-    this.pieces.changes.pipe(
-      takeUntil(this._destroyed$)
-    ).subscribe(change => console.log(change));
-  }
-
-  ngOnDestroy() {
-    this._destroyed$.next(true);
-    this._destroyed$.complete();
-  }
-
 }

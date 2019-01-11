@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AppState, selectChannelUsers } from '../../../store';
+import { tap } from 'rxjs/operators';
+import {
+  AppState,
+  selectChannelUsers
+ } from '../../../store';
+
 import {
   selectBoard,
   selectPlayersAll,
-  selectPlayersTotal,
-  selectCurrentPlayer,
-  selectIsPlayersTurn
+  selectIsPlayersTurn,
+  selectClient
 } from '../store';
+
 import { StartGame } from '../store/actions/feature.actions';
 import { User } from '../../../models/user';
 
@@ -21,24 +26,33 @@ export class GameComponent implements OnInit {
 
   players$: Observable<Array<User>>;
 
-  playersTotal$: Observable<number>;
-
-  user$: Observable<User>;
-
   board$: Observable<any>;
-
-  currentPlayer$: Observable<string>;
 
   isPlayersTurn$: Observable<(id: string) => boolean>;
 
+  user$: Observable<User>;
+
   constructor(private _store: Store<AppState>) {
-    this.playersTotal$ = this._store.select(selectPlayersTotal);
-    this.players$ = this._store.select(selectPlayersAll);
-    this.board$ = this._store.select(selectBoard);
-    this.currentPlayer$ = this._store.select(selectCurrentPlayer);
+
+    this.players$ = this._store.pipe(
+      select(selectPlayersAll)
+    );
+
+    this.user$ = this._store.pipe(
+      select(selectClient)
+    );
+
+    this.board$ = this._store.pipe(
+      select(selectBoard)
+    );
+
     this.isPlayersTurn$ = this._store.pipe(
       select(selectIsPlayersTurn)
     );
+  }
+
+  placePiece(columnIndex: number) {
+
   }
 
   ngOnInit() {

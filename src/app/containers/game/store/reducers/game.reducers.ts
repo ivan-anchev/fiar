@@ -17,6 +17,15 @@ export function reducer(state = initialState, action: All) {
         ...state,
         currentPlayer: action.payload.id
       };
+
+    case GameActionTypes.PLACE_PIECE:
+      const newBoard = [...state.board];
+      newBoard[action.payload.columnIndex].push(action.payload.playerId);
+
+      return {
+        ...state,
+        board: newBoard
+      };
     default: return state;
   }
 }

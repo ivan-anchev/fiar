@@ -1,14 +1,11 @@
 <div class="flc-layout--center game">
-
   <mat-card class="flc-margin--smaller flc-padding--large">
     <mat-card-content>
-
-      <fiar-board>
-        <fiar-board-col *ngFor="let column of board$ | async">
-          <fiar-piece *ngFor="let piece of column"></fiar-piece>
-        </fiar-board-col>
+      <fiar-board
+        [board]="board$ | async"
+        [disabled]="!(isPlayersTurn$ | async)((user$ | async)?.id)"
+        (columnClicked)="placePiece($event)">
       </fiar-board>
-
     </mat-card-content>
 
   </mat-card>
@@ -40,7 +37,9 @@
       <mat-divider></mat-divider>
 
       <div class="status-bar">
-        <span class="mat-body-2 flc-typography--caption-color flc--animation-slide-right">Your turn</span>
+        <span class="mat-body-2 flc-typography--caption-color flc--animation-slide-right">
+          <span *ngIf="(isPlayersTurn$ | async)((user$ | async)?.id)">Your turn</span>
+        </span>
       </div>
 
 

@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { User } from '../../../models/user';
 import * as game from './reducers/game.reducers';
 import * as players from './reducers/player.reducers';
 
@@ -58,7 +59,7 @@ export const selectPlayersTotal = createSelector(
   selectTotal
 );
 
-export const selectPlayersReady = createSelector(
-  selectPlayersTotal,
-  (playerCount: number) => playerCount === 2
+export const selectClient = createSelector(
+  selectPlayersAll,
+  (playerList: User[]) => playerList.find(player => player.isClient)
 );
