@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { User } from '../../../../models/user';
-import { AvatarTypes } from '../../../../models/avatar.enums';
+import { AvatarTypes } from '../../../../models/enums/avatar.enums';
 
 @Component({
   selector: 'fiar-profile-editor',

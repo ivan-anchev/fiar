@@ -1,14 +1,14 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { User } from '../../../../models/user';
+import { Player } from '../../../../models/player';
 import { PlayerActionTypes, All } from '../actions/player.actions';
 
-export interface PlayerState extends EntityState<User> {
+export interface PlayerState extends EntityState<Player> {
 }
 
 // Channel(game) host is always first
-const sortFn = (a: User, b: User) => a.isHost ? -1 : 1;
+const sortFn = (a: Player, b: Player) => a.isHost ? -1 : 1;
 
-export const playerAdapter = createEntityAdapter<User>({
+export const playerAdapter = createEntityAdapter<Player>({
   sortComparer: sortFn
 });
 

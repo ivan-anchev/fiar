@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { User } from '../../../../models/user';
+import { Player } from '../../../../models/player';
 
 export enum PlayerActionTypes {
   PLAYER_JOINED = '[Player] PLAYER_JOINED',
@@ -12,11 +12,11 @@ export enum PlayerActionTypes {
 
 export class PlayerJoined implements Action {
   readonly type = PlayerActionTypes.PLAYER_JOINED;
-  constructor(public payload: { player: User }) { }
+  constructor(public payload: { player: Player }) { }
 }
 export class Add implements Action {
   readonly type = PlayerActionTypes.ADD;
-  constructor(public payload: { player: User }) { }
+  constructor(public payload: { player: Player }) { }
 }
 
 export class Delete implements Action {
@@ -26,7 +26,7 @@ export class Delete implements Action {
 
 export class AddAll implements Action {
   readonly type = PlayerActionTypes.ADD_ALL;
-  constructor(public payload: { players: Array<User> }) { }
+  constructor(public payload: { players: Array<Player> }) { }
 }
 
 export type All = Add | PlayerJoined | Delete | AddAll;

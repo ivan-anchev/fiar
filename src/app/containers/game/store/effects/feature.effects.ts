@@ -5,7 +5,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { GameFeatureActionTypes, GameAction, StartGame } from '../actions/feature.actions';
 import { SetPlayerTurn, PlacePiece } from '../actions/game.actions';
 import { PlayerJoined, AddAll } from '../actions/player.actions';
-import { EventTypes } from '../event-types';
+import { WsMessageEvents } from '../../../../models/enums/ws-events';
 
 @Injectable()
 export class GameFeatureEffects {
@@ -21,13 +21,13 @@ export class GameFeatureEffects {
       let dispatch;
 
       switch (type) {
-        case EventTypes.JOIN_CHANNEL:
+        case WsMessageEvents.JOIN_CHANNEL:
           dispatch = new PlayerJoined({ player: meta });
           break;
-        case EventTypes.HANDSHAKE:
+        case WsMessageEvents.HANDSHAKE:
           dispatch = new PlayerJoined({ player: meta });
           break;
-        case EventTypes.PIECE_PLACED:
+        case WsMessageEvents.PIECE_PLACED:
           dispatch = new PlacePiece({ ...message.payload });
           break;
         default: break;

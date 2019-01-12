@@ -4,9 +4,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState, selectIsConnected, selectUser, selectChannelUsers } from '../';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, withLatestFrom, tap, filter } from 'rxjs/operators';
-import { WsEvents } from '../../models/ws-events';
-import { Channel } from '../../models/channel';
+import { map, switchMap, withLatestFrom} from 'rxjs/operators';
+import { WsEvents, WsMessageEvents } from '../../models/enums/ws-events';
 import { WsService } from '../../core/services/ws.service';
 import {
   WSActions,
@@ -78,7 +77,13 @@ export class WSEffects {
         withLatestFrom(this._store.select(selectUser)),
         switchMap(([ channel, user ]) => [
             new SetChannel({ channel }),
-            new AddChannelUser(({ user: { ...user, isHost: false, isClient: true } }))
+            new AddChannelUser(({
+              user: {
+                ...user,
+                isHost: false,
+                isClient: true
+              }
+            }))
           ])
       );
     })
@@ -100,7 +105,13 @@ export class WSEffects {
         switchMap(([channel, user]) => {
           return [
             new SetChannel({ channel }),
-            new AddChannelUser({ user: { ...user, isHost: true, isClient: true } })
+            new AddChannelUser({
+              user: {
+                ...user,
+                isHost: true,
+                isClient: true
+              }
+            })
           ];
         })
         // tap(() => this._router.navigate(['/game']))
@@ -136,7 +147,7 @@ export class WSEffects {
       let ret;
 
       switch (type) {
-        case 'JOIN_CHANNEL':
+        case WsMessageEvents.JOIN_CHANNEL:
 
           this._router.navigate(['/game']);
 
@@ -146,7 +157,7 @@ export class WSEffects {
           ];
 
           break;
-        case 'HANDSHAKE':
+        case WsMessageEvents.HANDSHAKE:
           this._router.navigate(['/game']);
 
           ret = [

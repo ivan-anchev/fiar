@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { User } from '../../../models/user';
+import { Player } from '../../../models/player';
 import * as game from './reducers/game.reducers';
 import * as players from './reducers/player.reducers';
 
@@ -66,5 +66,5 @@ export const selectPlayerIds = createSelector(
 
 export const selectClient = createSelector(
   selectPlayersAll,
-  (playerList: User[]) => playerList.find(player => player.isClient)
+  (playerList: Player[]) => playerList.find(player => player.isClient)
 );

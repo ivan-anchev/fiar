@@ -3,10 +3,10 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, withLatestFrom, combineLatest } from 'rxjs/operators';
+import { map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { GameActionTypes, PlacePiece, SetPlayerTurn } from '../actions/game.actions';
 import { WsAction } from '../actions/feature.actions';
-import { EventTypes } from '../event-types';
+import { WsMessageEvents } from '../../../../models/enums/ws-events';
 import { selectPlayerIds, selectClient } from '../';
 
 @Injectable()
@@ -32,11 +32,11 @@ export class GameEffects {
       const { playerId } = payload;
       const { id } = client;
       const nextPlayerId = (<any>playerIds).find(pid => pid !== playerId);
-      // should dispatch WS
+      // Client (current user) takes action => should dispatch WS
       if (playerId === id) {
         return [
           new SetPlayerTurn({ id: nextPlayerId }),
-          new WsAction({ type: EventTypes.PIECE_PLACED, payload })
+          new WsAction({ type: WsMessageEvents.PIECE_PLACED, payload })
         ];
       }
 

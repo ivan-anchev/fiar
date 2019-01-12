@@ -1,3 +1,0 @@
-export enum WsEvents {
-  BROADCAST_OPEN_CHANNELS = 'BROADCAST_OPEN_CHANNELS'
-}

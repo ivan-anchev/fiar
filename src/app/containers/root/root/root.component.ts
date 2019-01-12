@@ -15,5 +15,4 @@ export class RootComponent implements OnInit {
   ngOnInit() {
     this._store.dispatch(new CheckSession);
   }
-
 }

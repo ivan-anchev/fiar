@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { AvatarTypes, AvatarStates } from '../../../models/avatar.enums';
+import { AvatarTypes, AvatarStates } from '../../../models/enums/avatar.enums';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
