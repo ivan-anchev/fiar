@@ -59,6 +59,11 @@ export const selectPlayersTotal = createSelector(
   selectTotal
 );
 
+export const selectPlayerIds = createSelector(
+  selectPlayerState,
+  selectIds
+);
+
 export const selectClient = createSelector(
   selectPlayersAll,
   (playerList: User[]) => playerList.find(player => player.isClient)

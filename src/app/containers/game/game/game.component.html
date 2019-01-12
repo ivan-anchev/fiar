@@ -4,6 +4,7 @@
       <fiar-board
         [board]="board$ | async"
         [disabled]="!(isPlayersTurn$ | async)((user$ | async)?.id)"
+        [mapIdToIndex]="mapPlayerToIndexFn"
         (columnClicked)="placePiece($event)">
       </fiar-board>
     </mat-card-content>

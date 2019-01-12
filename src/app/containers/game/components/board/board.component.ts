@@ -12,7 +12,9 @@ export class BoardComponent implements OnInit {
 
   @Input() disabled: boolean;
 
-  @Output() columnClicked: EventEmitter<number> = new EventEmitter();
+  @Input() mapIdToIndex: (string) => number;
+
+  @Output() columnClicked: EventEmitter<{ columnIndex: number }> = new EventEmitter();
 
   @HostBinding('class') boardClass = 'flc-game-board';
 
@@ -27,6 +29,6 @@ export class BoardComponent implements OnInit {
       return;
     }
 
-    this.columnClicked.emit(columnIndex);
+    this.columnClicked.emit({ columnIndex });
   }
 }

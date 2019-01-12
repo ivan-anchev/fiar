@@ -19,13 +19,18 @@ export function reducer(state = initialState, action: All) {
       };
 
     case GameActionTypes.PLACE_PIECE:
-      const newBoard = [...state.board];
-      newBoard[action.payload.columnIndex].push(action.payload.playerId);
-
       return {
         ...state,
-        board: newBoard
+        board: pushAt(state.board, action.payload.columnIndex, action.payload.playerId)
       };
     default: return state;
   }
 }
+
+const pushAt = (arr: Array<Array<any>>, colIndex: number, item: any) => {
+  return [
+    ...arr.slice(0, colIndex),
+    [...arr[colIndex], item],
+    ...arr.slice(colIndex + 1)
+  ];
+};

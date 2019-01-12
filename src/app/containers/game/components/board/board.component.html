@@ -2,5 +2,5 @@
   *ngFor="let column of board; let columnIndex = index;"
   [disabled]="disabled"
   (click)="onColumnClick(columnIndex)">
-  <fiar-piece *ngFor="let piece of column"></fiar-piece>
+  <fiar-piece *ngFor="let piece of column" [playerIndex]="mapIdToIndex(piece)"></fiar-piece>
 </fiar-board-col>
