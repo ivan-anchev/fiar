@@ -1,18 +1,26 @@
 import { Action } from '@ngrx/store';
 
 export enum GameFeatureActionTypes {
-  GAME_ACTION = '[Game] GAME_ACTION',
-  START_GAME = '[GAME] START_GAME'
+  GAME_ACTION = '[Game Feature] GAME_ACTION',
+  START_GAME = '[Game Feature] START_GAME',
+  WS_ACTION = '[Game Feature] WS_ACTION'
 }
 
+// Used for intercepting incoming WebSocket events ( WebSocket => Game)
 export class GameAction implements Action {
   readonly type = GameFeatureActionTypes.GAME_ACTION;
   constructor(public payload) { }
+}
+// Used for emiting outcoming WebSocket events( Game => WebSocket )
+export class WsAction implements Action {
+  readonly type = GameFeatureActionTypes.WS_ACTION;
+  constructor(public payload: { type: string, payload: unknown }) { }
 }
 
 export class StartGame implements Action {
   readonly type = GameFeatureActionTypes.START_GAME;
   constructor(public payload: { players }) { }
 }
+
 
 export type All = GameAction | StartGame;

@@ -40,6 +40,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   _destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  mapPlayerToIndexFn: Function;
+
   constructor(private _store: Store<AppState>) {
 
     this.players$ = this._store.pipe(
@@ -64,10 +66,12 @@ export class GameComponent implements OnInit, OnDestroy {
       select(selectPlayerIds),
       takeUntil(this._destroyed$),
     ).subscribe(ids => this.playerIds = <string[]>ids);
+
+    this.mapPlayerToIndexFn = this.mapPlayerToIndex.bind(this);
   }
 
-  mapPlayerToIndexFn(playerId: string): number {
-    return this.playerIds ? this.playerIds.indexOf(playerId) : 0;
+  mapPlayerToIndex(playerId: string): number {
+    return this.playerIds.indexOf(playerId);
   }
 
   placePiece({ columnIndex }) {

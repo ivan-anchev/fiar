@@ -30,7 +30,7 @@ export function reducer(state = initialState, action: All) {
 const pushAt = (arr: Array<Array<any>>, colIndex: number, item: any) => {
   return [
     ...arr.slice(0, colIndex),
-    [...arr[colIndex], item],
+    [ item, ...arr[colIndex]],
     ...arr.slice(colIndex + 1)
   ];
 };

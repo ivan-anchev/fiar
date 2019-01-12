@@ -22,7 +22,10 @@ import {
   SetOpenChannels,
   MessageReceive,
   ChannelMessageReceive } from '../actions/ws.actions';
-import { GameAction, StartGame } from '../../containers/game/store/actions/feature.actions';
+import {
+  GameAction,
+  WsAction,
+  GameFeatureActionTypes } from '../../containers/game/store/actions/feature.actions';
 
 @Injectable()
 export class WSEffects {
@@ -175,5 +178,12 @@ export class WSEffects {
       }
       return of(dispatchAction);
     })
+  );
+
+  @Effect({ dispatch: false })
+  gameFeatureWsAction$: Observable<any> = this._actions.pipe(
+    ofType(GameFeatureActionTypes.WS_ACTION),
+    map((action: WsAction) => action.payload),
+    switchMap(payload => of(this._ws.send(payload)))
   );
 }

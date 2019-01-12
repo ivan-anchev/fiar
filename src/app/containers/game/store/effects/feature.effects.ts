@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { GameFeatureActionTypes, GameAction, StartGame } from '../actions/feature.actions';
-import { SetPlayerTurn } from '../actions/game.actions';
+import { SetPlayerTurn, PlacePiece } from '../actions/game.actions';
 import { PlayerJoined, AddAll } from '../actions/player.actions';
 import { EventTypes } from '../event-types';
 
@@ -26,6 +26,9 @@ export class GameFeatureEffects {
           break;
         case EventTypes.HANDSHAKE:
           dispatch = new PlayerJoined({ player: meta });
+          break;
+        case EventTypes.PIECE_PLACED:
+          dispatch = new PlacePiece({ ...message.payload });
           break;
         default: break;
       }
