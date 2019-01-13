@@ -24,7 +24,7 @@ import {
 import {
   GameAction,
   WsAction,
-  GameFeatureActionTypes } from '../../containers/game/store/actions/feature.actions';
+  GameFeatureActionTypes } from '../../views/game/store/actions/feature.actions';
 
 @Injectable()
 export class WSEffects {

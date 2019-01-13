@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { RootComponent} from './root/root.component';
+import { HomeComponent } from './containers/home/home.component';
+import { RootComponent} from './containers/root/root.component';
 
 
 const rootRoutes: Routes = [
@@ -20,7 +20,7 @@ const rootRoutes: Routes = [
       },
       {
         path: 'game',
-        loadChildren: 'src/app/containers/game/game.module#GameModule'
+        loadChildren: 'src/app/views/game/game.module#GameModule'
       }
     ]
   }

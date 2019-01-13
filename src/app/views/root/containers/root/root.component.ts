@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { CheckSession } from '../../../store/actions/user.actions';
+import { AppState } from '../../../../store';
+import { CheckSession } from '../../../../store/actions/user.actions';
 
 @Component({
   selector: 'fiar-root',

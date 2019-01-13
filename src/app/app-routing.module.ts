@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: 'src/app/containers/root/root.module#RootModule'
+    loadChildren: 'src/app/views/root/root.module#RootModule'
   }
 ];
 

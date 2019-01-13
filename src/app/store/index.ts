@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 import * as ui from './reducers/ui.reducers';
 import * as ws from './reducers/ws.reducers';
 import * as user from './reducers/user.reducers';
-import * as gameFeature from '../containers/game/store';
+import * as gameFeature from '../views/game/store';
 import { storeLogger } from 'ngrx-store-logger';
 
 export interface AppState {

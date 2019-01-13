@@ -12,10 +12,10 @@ import {
   MatListModule,
   MatRadioModule } from '@angular/material';
 
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './containers/home/home.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ProfileEditorComponent } from './components/profile-editor/profile-editor.component';
-import { RootComponent } from './root/root.component';
+import { RootComponent } from './containers/root/root.component';
 
 @NgModule({
   declarations: [

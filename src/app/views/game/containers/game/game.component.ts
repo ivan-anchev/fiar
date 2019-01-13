@@ -5,7 +5,7 @@ import { tap, takeUntil } from 'rxjs/operators';
 import {
   AppState,
   selectChannelUsers
- } from '../../../store';
+} from '../../../../store';
 
 import {
   selectBoard,
@@ -13,11 +13,11 @@ import {
   selectIsPlayersTurn,
   selectPlayerIds,
   selectClient
-} from '../store';
+} from '../../store';
 
-import { StartGame } from '../store/actions/feature.actions';
-import { PlacePiece } from '../store/actions/game.actions';
-import { User } from '../../../models/user';
+import { StartGame } from '../../store/actions/feature.actions';
+import { PlacePiece } from '../../store/actions/game.actions';
+import { User } from '../../../../models/user';
 
 @Component({
   selector: 'fiar-game',

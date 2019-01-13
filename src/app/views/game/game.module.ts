@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducers } from './store';
 import { GameRoutingModule } from './game-routing.module';
-import { GameComponent } from './game/game.component';
+import { GameComponent } from './containers/game/game.component';
 import { GameFeatureEffects } from './store/effects/feature.effects';
 import { GameEffects } from './store/effects/game.effects';
 
