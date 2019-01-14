@@ -4,8 +4,8 @@ import { createEmptyBoard } from '../../utils/game';
 
 export interface GameState {
   board: Board;
-  currentPlayer: 'string';
-  winner: 'string';
+  currentPlayer: string;
+  winner: string;
   winningSeq: Array<PiecePosition>;
 }
 
