@@ -6,14 +6,18 @@ export interface GameState {
   board: Board;
   currentPlayer: string;
   winner: string;
-  winningSeq: Array<PiecePosition>;
+  winningSequence: Array<PiecePosition>;
+  winValidated: boolean;
+  error: Error;
 }
 
 export const initialState: GameState = {
   board: createEmptyBoard(),
   currentPlayer: null,
   winner: null,
-  winningSeq: null
+  winningSequence: null,
+  winValidated: false,
+  error: null
 };
 
 export function reducer(state = initialState, action: All) {
@@ -28,6 +32,27 @@ export function reducer(state = initialState, action: All) {
       return {
         ...state,
         board: pushAt(state.board, action.payload.columnIndex, action.payload.playerId)
+      };
+    case GameActionTypes.WIN_GAME_FAIL:
+      return {
+        ...state,
+        winner: null,
+        winningSeq: null,
+        error: action.payload.error
+      };
+    case GameActionTypes.VALIDATE_WIN_GAME_SUCCESS: // set win for validator
+    case GameActionTypes.WIN_GAME_SUCCESS: // set win for winner
+      return {
+        ...state,
+        winValidated: true
+      };
+    case GameActionTypes.VALIDATE_WIN_GAME:
+    case GameActionTypes.WIN_GAME_INIT:
+      return {
+        ...state,
+        winner: action.payload.winner,
+        winningSequence: action.payload.winningSequence,
+        winValidated: false
       };
     default: return state;
   }

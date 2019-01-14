@@ -43,6 +43,31 @@ export const selectIsPlayersTurn = createSelector(
   currentPlayerID => (id: string) => currentPlayerID === id
 );
 
+export const selectWinner = createSelector(
+  selectGameState,
+  (gameState: game.GameState) => gameState.winner
+);
+
+export const selectWinningSequence = createSelector(
+  selectGameState,
+  (gameState: game.GameState) => gameState.winningSequence
+);
+
+export const selectWin = createSelector(
+  selectGameState,
+  (gameState: game.GameState) => {
+    const { winValidated, winner, winningSequence } = gameState;
+    if (winValidated) {
+      return {
+        winner,
+        winningSequence
+      };
+    }
+
+    return null;
+  }
+);
+
 // Players
 export const selectPlayerState = createSelector(
   selectGameFeature,

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { tap, takeUntil } from 'rxjs/operators';
+import { Board, PiecePosition, Win } from '../../../../models/game';
 import {
   AppState,
   selectChannelUsers
@@ -12,7 +13,8 @@ import {
   selectPlayersAll,
   selectIsPlayersTurn,
   selectPlayerIds,
-  selectClient
+  selectClient,
+  selectWin
 } from '../../store';
 
 import { StartGame } from '../../store/actions/feature.actions';
@@ -30,7 +32,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   playerIds: string[];
 
-  board$: Observable<any>;
+  board$: Observable<Board>;
+
+  win$: Observable<Win>;
 
   isPlayersTurn$: Observable<(id: string) => boolean>;
 
@@ -42,11 +46,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
   mapPlayerToIndexFn: Function;
 
-  test;
-
   constructor(private _store: Store<AppState>) {
     this.players$ = this._store.pipe(
       select(selectPlayersAll)
+    );
+
+    this.win$ = this._store.pipe(
+      select(selectWin)
     );
 
     this.user$ = this._store.pipe(

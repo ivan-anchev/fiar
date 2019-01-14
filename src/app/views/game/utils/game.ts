@@ -3,16 +3,31 @@ import { Board, PiecePosition } from '../../../models/game';
 const WINNING_SEQ_COUNT = 4;
 
 export const createEmptyBoard = (): Board => Array(7).fill([]);
+
+export const compareSequence = (seq1: Array<PiecePosition>, seq2: Array<PiecePosition>): boolean =>
+  seq1.every((pos, index) => pos['i'] === seq2[index]['i'] && pos['j'] === seq2[index]['j']);
 /**
  * Check for winning sequence
  * @param  board Board
  * @return <Array<PiecePosition>>
  */
 export const checkForWin = (board: Board) => {
-  return checkVertical(board) ||
-         checkHorizontal(board) ||
-         checkDiagonalLeftToRight(board) ||
-         checkDiagonalRightToLeft(board);
+  const winningSequence = checkVertical(board) ||
+                        checkHorizontal(board) ||
+               checkDiagonalLeftToRight(board) ||
+               checkDiagonalRightToLeft(board);
+
+  if (!winningSequence || winningSequence.length < WINNING_SEQ_COUNT) {
+    return null;
+  }
+  const winner = getPlayerAtPiecePosition(board, winningSequence[0]);
+
+  return { winner, winningSequence };
+};
+
+export const getPlayerAtPiecePosition = (board, piecePosition: PiecePosition): string => {
+  const { i, j } = piecePosition;
+  return board[i][j];
 };
 
 /**
@@ -167,8 +182,8 @@ export const checkLine = (line: Array<string>, boardIndex: number): Array<PieceP
 
 /**
  * Transpose matrix
- * [x][x][x] => [x][y][x]
- * [y][y][y]    [x][y][x]
+ * [x][x][x]    [x][y][x]
+ * [y][y][y] => [x][y][x]
  * [x][x][x]    [x][y][x]
  *
  * Filters out dead values
