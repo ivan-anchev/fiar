@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Player } from '../../../models/player';
+import { Win } from '../../../models/game';
 import * as game from './reducers/game.reducers';
 import * as players from './reducers/player.reducers';
 
@@ -97,4 +98,36 @@ export const selectPlayerIds = createSelector(
 export const selectClient = createSelector(
   selectPlayersAll,
   (playerList: Player[]) => playerList.find(player => player.isClient)
+);
+
+
+// Mixed
+export const selectStatusMessage = createSelector(
+  selectClient,
+  selectPlayersAll,
+  selectCurrentPlayer,
+  selectWin,
+  (client: Player, playerEntities: Player[], currentPlayer: string, win: Win) => {
+    let message = '';
+    const { id } = client;
+    console.log(playerEntities);
+    const playerTwo = playerEntities.find(pe => pe.id !== id);
+
+    if (win) {
+      const { winner } = win;
+      if (winner === id) {
+        message = 'You win!';
+      } else {
+        message = `${playerTwo.name || 'Player Two'} wins!`;
+      }
+    } else {
+      if (currentPlayer === id) {
+        message = 'Your turn';
+      } else {
+        message = `${playerTwo.name || 'Player Two'}'s turn`;
+      }
+    }
+
+    return message;
+  }
 );

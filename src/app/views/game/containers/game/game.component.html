@@ -1,6 +1,3 @@
-<div style="background: white;">
-  {{ win$ | async | json }}
-</div>
 <div class="flc-layout--center game">
   <mat-card class="flc-margin--smaller flc-padding--large">
     <mat-card-content>
@@ -16,40 +13,39 @@
   </mat-card>
 
   <mat-card class="flc-card-aside">
-    <mat-card-content>
+    <mat-card-content style="margin-bottom: 0px;">
       <div class="flc-padding--small-right" *ngIf="(players$ | async) as players">
         <div *ngFor="let player of players; let i = index;">
-          <div class="flc-game-avatar-group">
+          <fiar-avatar-group>
             <fiar-avatar
               [type]="player.avatar"
               [state]="(isPlayersWinning$ | async)(player.id) ? 'winner' : (isPlayersTurn$ | async)(player.id) ? 'their-turn' : ''"
               [index]="i">
             </fiar-avatar>
 
-            <span *ngIf="player.name" class="mat-h3">
+            <span *ngIf="player.name" style="line-height: 1; white-space: pre-line; max-width: 100px;" class="mat-h3">
               {{player.name}}
             </span>
 
-            <span *ngIf="!player.name" class="mat-h3">
+            <span *ngIf="!player.name" style="line-height: 1; white-space: pre-line; max-width: 100px;" class="mat-h3">
               Player {{ i ? 'Two' : 'One' }}
-              <i *ngIf="player.isCurrent" class="mdl-typography--caption-color-contrast">(you)</i>
+              <i *ngIf="player.isClient" class="mdl-typography--caption-color-contrast">(you)</i>
             </span>
 
-          </div>
+          </fiar-avatar-group>
         </div>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <div class="status-bar">
-        <span class="mat-body-2 flc-typography--caption-color flc--animation-slide-right">
-          <span *ngIf="(isPlayersTurn$ | async)((user$ | async)?.id)">Your turn</span>
-        </span>
       </div>
 
 
 
     </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <fiar-status-bar [animate]="true">
+      <!-- <span *ngIf="(isPlayersTurn$ | async)((user$ | async)?.id)">Your turn</span> -->
+      {{statusMessage$ | async}}
+    </fiar-status-bar>
 
     <mat-divider></mat-divider>
 

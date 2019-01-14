@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './containers/home/home.component';
 import { RootComponent} from './containers/root/root.component';
-
+import { GameGuard } from '../../guards/game.guard';
 
 const rootRoutes: Routes = [
   {
@@ -20,7 +20,8 @@ const rootRoutes: Routes = [
       },
       {
         path: 'game',
-        loadChildren: 'src/app/views/game/game.module#GameModule'
+        loadChildren: 'src/app/views/game/game.module#GameModule',
+        canActivate: [GameGuard]
       }
     ]
   }

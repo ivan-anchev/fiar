@@ -19,8 +19,9 @@ import { PlayerEffects } from './store/effects/player.effects';
 import { BoardComponent } from './components/board/board.component';
 import { BoardColComponent } from './components/board-col/board-col.component';
 import { PieceComponent } from './components/piece/piece.component';
+import { HudComponent } from './components/hud/hud.component';
 @NgModule({
-  declarations: [GameComponent, BoardComponent, BoardColComponent, PieceComponent],
+  declarations: [GameComponent, BoardComponent, BoardColComponent, PieceComponent, HudComponent],
   imports: [
     CommonModule,
     MatCardModule,
