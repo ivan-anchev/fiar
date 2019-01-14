@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit, HostBinding, Input, Output, EventEmitter } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  HostBinding,
+  Input,
+  Output,
+  EventEmitter } from '@angular/core';
+import { Board, Win, PiecePosition } from '../../../../models/game';
 
 @Component({
   selector: 'fiar-board',
@@ -8,7 +16,7 @@ import { ChangeDetectionStrategy, Component, OnInit, HostBinding, Input, Output,
 })
 export class BoardComponent implements OnInit {
 
-  @Input() board: Array<Array<string>>;
+  @Input() board: Board;
 
   @Input() disabled: boolean;
 
@@ -16,11 +24,30 @@ export class BoardComponent implements OnInit {
 
   @Output() columnClicked: EventEmitter<{ columnIndex: number }> = new EventEmitter();
 
+  winningSequence: Array<PiecePosition>;
+
+  winner: string;
+
   @HostBinding('class') boardClass = 'flc-game-board';
 
   constructor() { }
 
-  ngOnInit() {
+  @Input() set win(win: Win) {
+    if (win) {
+      const { winner, winningSequence } = win;
+      this.winner = winner;
+      this.winningSequence = winningSequence;
+    }
+  }
+
+  isPieceInSequence(piecePosition: PiecePosition): boolean {
+    if (!this.winner || !this.winningSequence) {
+      return false;
+    }
+
+    const { i, j } = piecePosition;
+    const findPiecePosition = this.winningSequence.find(pos => pos['i'] === i && pos['j'] === j);
+    return !!findPiecePosition;
   }
 
   onColumnClick(columnIndex: number) {
@@ -31,4 +58,8 @@ export class BoardComponent implements OnInit {
 
     this.columnClicked.emit({ columnIndex });
   }
+
+  ngOnInit() {
+  }
+
 }

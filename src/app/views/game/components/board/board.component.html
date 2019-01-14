@@ -2,5 +2,9 @@
   *ngFor="let column of board; let columnIndex = index;"
   [disabled]="disabled"
   (click)="onColumnClick(columnIndex)">
-  <fiar-piece *ngFor="let piece of column" [playerIndex]="mapIdToIndex(piece)"></fiar-piece>
+  <fiar-piece
+    *ngFor="let piece of column; let pieceIndex = index;"
+    [playerIndex]="mapIdToIndex(piece)"
+    [isWinning]="isPieceInSequence({ i: columnIndex, j: pieceIndex })">
+  </fiar-piece>
 </fiar-board-col>

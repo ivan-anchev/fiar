@@ -23,6 +23,10 @@ export class PieceComponent implements OnInit {
     return this.playerIndex === 1;
   }
 
+  @HostBinding('class.winner') get isWinner() {
+    return this.isWinning;
+  }
+
   ngOnInit() {
   }
 

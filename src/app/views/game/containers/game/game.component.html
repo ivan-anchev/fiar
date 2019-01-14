@@ -6,6 +6,7 @@
     <mat-card-content>
       <fiar-board
         [board]="board$ | async"
+        [win]="win$ | async"
         [disabled]="!(isPlayersTurn$ | async)((user$ | async)?.id)"
         [mapIdToIndex]="mapPlayerToIndexFn"
         (columnClicked)="placePiece($event)">
