@@ -22,7 +22,7 @@
           <div class="flc-game-avatar-group">
             <fiar-avatar
               [type]="player.avatar"
-              [state]="(isPlayersTurn$ | async)(player.id) ? 'their-turn' : ''"
+              [state]="(isPlayersWinning$ | async)(player.id) ? 'winner' : (isPlayersTurn$ | async)(player.id) ? 'their-turn' : ''"
               [index]="i">
             </fiar-avatar>
 

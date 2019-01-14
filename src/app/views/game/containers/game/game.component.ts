@@ -12,6 +12,7 @@ import {
   selectBoard,
   selectPlayersAll,
   selectIsPlayersTurn,
+  selectIsPlayerWinning,
   selectPlayerIds,
   selectClient,
   selectWin
@@ -37,6 +38,8 @@ export class GameComponent implements OnInit, OnDestroy {
   win$: Observable<Win>;
 
   isPlayersTurn$: Observable<(id: string) => boolean>;
+
+  isPlayersWinning$: Observable<(id: string) => boolean>;
 
   user$: Observable<User>;
 
@@ -66,6 +69,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
     this.isPlayersTurn$ = this._store.pipe(
       select(selectIsPlayersTurn)
+    );
+
+    this.isPlayersWinning$ = this._store.pipe(
+      select(selectIsPlayerWinning)
     );
 
 

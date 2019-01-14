@@ -4,6 +4,6 @@ export enum AvatarTypes {
 }
 
 export enum AvatarStates {
-  Winning = 'winning',
+  Winning = 'winner',
   TheirTurn  = 'their-turn'
 }
