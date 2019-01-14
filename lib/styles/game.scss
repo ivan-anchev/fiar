@@ -104,15 +104,15 @@ $player-two-color: #8fbc8f;;
         width: $total-piece-size;
         border-right: 1px solid #ccc;
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        flex-direction: column-reverse;
+        justify-content: flex-start;
         overflow: hidden;
         &:last-child {
             border: 0;
             width: $total-piece-size;
         }
         &:not(.disabled) {
-          &:before {
+          &:after {
               content: "";
               box-sizing: border-box;
               width: $piece-size;
@@ -129,13 +129,13 @@ $player-two-color: #8fbc8f;;
               background: #f9f9f9;
               box-shadow: inset 0px -3px 10px rgba(0,0,0,0.1);
               cursor: pointer;
-              &:before {
+              &:after {
                   opacity: 1;
                   transform: translateY(0);
               }
           }
         }
-        > .flc-game-piece:first-child {
+        > .flc-game-piece:last-child {
             animation: drop-in 0.5s linear;
             flex-shrink: 0;
         }

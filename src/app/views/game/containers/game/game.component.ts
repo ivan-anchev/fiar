@@ -42,8 +42,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   mapPlayerToIndexFn: Function;
 
-  constructor(private _store: Store<AppState>) {
+  test;
 
+  constructor(private _store: Store<AppState>) {
     this.players$ = this._store.pipe(
       select(selectPlayersAll)
     );

@@ -147,6 +147,7 @@ export class WSEffects {
       let ret;
 
       switch (type) {
+        // Intercept certain events which are not related to the game itself or have side effects
         case WsMessageEvents.JOIN_CHANNEL:
 
           this._router.navigate(['/game']);

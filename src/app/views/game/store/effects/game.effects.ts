@@ -7,7 +7,8 @@ import { map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { GameActionTypes, PlacePiece, SetPlayerTurn } from '../actions/game.actions';
 import { WsAction } from '../actions/feature.actions';
 import { WsMessageEvents } from '../../../../models/enums/ws-events';
-import { selectPlayerIds, selectClient } from '../';
+import { selectPlayerIds, selectClient, selectBoard } from '../';
+import { checkForWin } from '../../utils/game';
 
 @Injectable()
 export class GameEffects {
@@ -26,12 +27,19 @@ export class GameEffects {
       this._store.pipe(
         select(selectClient)
       ),
-      (payload, playerIds, client) => ({ payload, playerIds, client })
+      this._store.pipe(
+        select(selectBoard)
+      ),
+      (payload, playerIds, client, board) => ({ payload, playerIds, client, board })
     ),
-    switchMap(({ payload, playerIds, client }) => {
+    switchMap(({ payload, playerIds, client, board }) => {
       const { playerId } = payload;
       const { id } = client;
       const nextPlayerId = (<any>playerIds).find(pid => pid !== playerId);
+      const win = checkForWin(board);
+      if (win) {
+        alert(JSON.stringify(win));
+      }
       // Client (current user) takes action => should dispatch WS
       if (playerId === id) {
         return [
