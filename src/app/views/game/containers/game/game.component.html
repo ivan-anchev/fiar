@@ -4,6 +4,7 @@
       <fiar-board
         [board]="board$ | async"
         [win]="win$ | async"
+        [forceWinner]="winnerBySurrender$ | async"
         [disabled]="!(isPlayersTurn$ | async)((user$ | async)?.id) || (win$ | async)"
         [mapIdToIndex]="mapPlayerToIndexFn"
         (columnClicked)="placePiece($event)">
@@ -48,8 +49,8 @@
     <mat-divider></mat-divider>
 
     <mat-card-actions>
-      <button *ngIf="!(win$ | async)" mat-button color="warn">SURRENDER</button>
-      <button *ngIf="(win$ | async)" mat-button color="accent" (click)="exit()">EXIT</button>
+      <button *ngIf="!(win$ | async)" mat-button color="warn" (click)="surrender()">SURRENDER</button>
+      <button *ngIf="(win$ | async)" mat-button color="accent" (click)="exit()">BACK TO MAIN MENU</button>
     </mat-card-actions>
   </mat-card>
 </div>

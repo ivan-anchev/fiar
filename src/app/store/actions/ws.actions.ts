@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Channel, ChannelResponse } from '../../models/channel';
+import { ChannelResponse } from '../../models/channel';
 
 export enum WSActions {
   SET_CONNECTED = '[WS] SET_CONNECTED',

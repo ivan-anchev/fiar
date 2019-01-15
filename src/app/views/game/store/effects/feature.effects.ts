@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { GameFeatureActionTypes, GameAction, StartGame } from '../actions/feature.actions';
-import { SetPlayerTurn, PlacePiece, ValidateWinGame, WinGameSuccess } from '../actions/game.actions';
+import { SetPlayerTurn, PlacePiece, ValidateWinGame, WinGameSuccess, Surrender, SetWinner } from '../actions/game.actions';
 import { PlayerJoined, AddAll } from '../actions/player.actions';
 import { WsMessageEvents } from '../../../../models/enums/ws-events';
 
@@ -35,6 +35,9 @@ export class GameFeatureEffects {
           break;
         case WsMessageEvents.VALIDATE_WIN_GAME_SUCCESS:
           dispatch = new WinGameSuccess();
+          break;
+        case WsMessageEvents.SURRENDER:
+          dispatch = new Surrender({ ...message.payload });
           break;
         default: break;
       }

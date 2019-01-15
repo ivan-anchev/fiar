@@ -8,6 +8,7 @@ export interface GameState {
   winner: string;
   winningSequence: Array<PiecePosition>;
   winValidated: boolean;
+  surrenderedPlayer: string;
   error: Error;
 }
 
@@ -17,6 +18,7 @@ export const initialState: GameState = {
   winner: null,
   winningSequence: null,
   winValidated: false,
+  surrenderedPlayer: null,
   error: null
 };
 
@@ -53,6 +55,17 @@ export function reducer(state = initialState, action: All) {
         winner: action.payload.winner,
         winningSequence: action.payload.winningSequence,
         winValidated: false
+      };
+    case GameActionTypes.SURRENDER:
+      return {
+        ...state,
+        surrenderedPlayer: action.payload.playerId,
+        winValidated: true
+      };
+    case GameActionTypes.SET_WINNER:
+      return {
+        ...state,
+        winner: action.payload.winner
       };
     case GameActionTypes.END_GAME:
       return {

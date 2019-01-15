@@ -9,6 +9,8 @@ export enum GameActionTypes {
   WIN_GAME_FAIL = '[Game] WIN_GAME_FAIL',
   VALIDATE_WIN_GAME = '[Game] VALIDATE_WIN_GAME',
   VALIDATE_WIN_GAME_SUCCESS = '[Game] VALIDATE_WIN_GAME_SUCCESS',
+  SURRENDER = '[Game] SURRENDER',
+  SET_WINNER = '[Game] SET_WINNER',
   END_GAME = '[Game] END GAME'
 }
 
@@ -46,6 +48,16 @@ export class ValidateWinGameSuccess implements Action {
   constructor(public payload: { winner: string, winningSequence: Array<PiecePosition> }) { }
 }
 
+export class Surrender implements Action {
+  readonly type = GameActionTypes.SURRENDER;
+  constructor(public payload: { playerId }) { }
+}
+
+export class SetWinner implements Action {
+  readonly type = GameActionTypes.SET_WINNER;
+  constructor(public payload: { winner }) { }
+}
+
 export class EndGame implements Action {
   readonly type = GameActionTypes.END_GAME;
 }
@@ -57,4 +69,6 @@ export type All = SetPlayerTurn
                   | ValidateWinGame
                   | ValidateWinGameSuccess
                   | WinGameFail
-                  | EndGame;
+                  | EndGame
+                  | Surrender
+                  | SetWinner;

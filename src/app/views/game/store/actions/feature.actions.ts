@@ -3,7 +3,8 @@ import { Action } from '@ngrx/store';
 export enum GameFeatureActionTypes {
   GAME_ACTION = '[Game Feature] GAME_ACTION',
   START_GAME = '[Game Feature] START_GAME',
-  WS_ACTION = '[Game Feature] WS_ACTION'
+  WS_ACTION = '[Game Feature] WS_ACTION',
+  NOOP_ACTION = '[Game Feature] NOOP_ACTION'
 }
 
 // Used for intercepting incoming WebSocket events ( WebSocket => Game)
@@ -22,5 +23,9 @@ export class StartGame implements Action {
   constructor(public payload: { players }) { }
 }
 
+export class NoopAction implements Action {
+  readonly type = GameFeatureActionTypes.NOOP_ACTION;
+}
 
-export type All = GameAction | StartGame;
+
+export type All = GameAction | StartGame | NoopAction | WsAction;

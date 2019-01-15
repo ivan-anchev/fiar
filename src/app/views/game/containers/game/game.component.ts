@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { tap, takeUntil } from 'rxjs/operators';
-import { Board, PiecePosition, Win } from '../../../../models/game';
+import { Board, Win } from '../../../../models/game';
 import {
   AppState,
   selectChannelUsers
@@ -13,6 +13,7 @@ import {
   selectPlayersAll,
   selectIsPlayersTurn,
   selectIsPlayerWinning,
+  selectWinnerBySurrender,
   selectStatusMessage,
   selectPlayerIds,
   selectClient,
@@ -20,7 +21,7 @@ import {
 } from '../../store';
 
 import { StartGame } from '../../store/actions/feature.actions';
-import { PlacePiece, EndGame } from '../../store/actions/game.actions';
+import { PlacePiece, EndGame, Surrender, SetWinner } from '../../store/actions/game.actions';
 import { User } from '../../../../models/user';
 
 @Component({
@@ -37,6 +38,8 @@ export class GameComponent implements OnInit, OnDestroy {
   board$: Observable<Board>;
 
   win$: Observable<Win>;
+
+  winnerBySurrender$: Observable<string>;
 
   isPlayersTurn$: Observable<(id: string) => boolean>;
 
@@ -59,6 +62,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
     this.win$ = this._store.pipe(
       select(selectWin)
+    );
+
+    this.winnerBySurrender$ = this._store.pipe(
+      select(selectWinnerBySurrender)
     );
 
     this.user$ = this._store.pipe(
@@ -97,6 +104,11 @@ export class GameComponent implements OnInit, OnDestroy {
   placePiece({ columnIndex }) {
     const playerId = this.userObj.id;
     this._store.dispatch(new PlacePiece({ playerId, columnIndex }));
+  }
+
+  surrender() {
+    const playerId = this.userObj.id;
+    this._store.dispatch(new Surrender({ playerId }));
   }
 
   exit() {

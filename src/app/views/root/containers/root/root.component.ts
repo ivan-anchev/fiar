@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState, selectIsConnecting } from '../../../../store';
 import { CheckSession } from '../../../../store/actions/user.actions';
 
 @Component({
@@ -10,7 +11,13 @@ import { CheckSession } from '../../../../store/actions/user.actions';
 })
 export class RootComponent implements OnInit {
 
-  constructor(private _store: Store<AppState>) { }
+  isConnecting$: Observable<boolean>;
+
+  constructor(private _store: Store<AppState>) {
+    this.isConnecting$ = _store.pipe(
+      select(selectIsConnecting)
+    );
+  }
 
   ngOnInit() {
     this._store.dispatch(new CheckSession);

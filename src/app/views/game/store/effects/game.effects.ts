@@ -5,7 +5,7 @@ import { AppState } from '../../../../store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { map, tap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { WsAction } from '../actions/feature.actions';
+import { WsAction, NoopAction } from '../actions/feature.actions';
 import { WsMessageEvents } from '../../../../models/enums/ws-events';
 import { selectPlayerIds, selectClient, selectBoard } from '../';
 import { checkForWin, compareSequence } from '../../utils/game';
@@ -15,7 +15,9 @@ import {
   SetPlayerTurn,
   WinGameInit,
   ValidateWinGame,
-  ValidateWinGameSuccess  } from '../actions/game.actions';
+  ValidateWinGameSuccess,
+  Surrender,
+  SetWinner} from '../actions/game.actions';
 
 @Injectable()
 export class GameEffects {
@@ -71,6 +73,37 @@ export class GameEffects {
     ofType(GameActionTypes.WIN_GAME_INIT),
     map((action: WinGameInit) => action.payload),
     switchMap(payload => of(new WsAction({ type: WsMessageEvents.VALIDATE_WIN_GAME, payload })))
+  );
+
+  @Effect()
+  surrender$: Observable<any> = this._actions.pipe(
+    ofType(GameActionTypes.SURRENDER),
+    map((action: Surrender) => action.payload),
+    withLatestFrom(
+      this._store.pipe(
+        select(selectClient)
+      ),
+      this._store.pipe(
+        select(selectPlayerIds)
+      ),
+      (payload, client, playerIds) => ({ payload, client, playerIds })
+    ),
+    switchMap(({ payload, client, playerIds }) => {
+      const { id } = client;
+      const { playerId } = payload;
+
+      const winner = (<string[]>playerIds).find(p => p !== playerId);
+
+      const dispatch: Action[] = [
+        new SetWinner({ winner })
+      ];
+
+      if (playerId === id) {
+        dispatch.push(new WsAction({type: WsMessageEvents.SURRENDER, payload }));
+      }
+
+      return dispatch;
+    })
   );
 
   @Effect({ dispatch: false })

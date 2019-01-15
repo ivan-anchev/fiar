@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { Store, Action } from '@ngrx/store';
-import { AppState, selectIsConnected, selectUser, selectChannelUsers } from '../';
+import { AppState, selectIsConnected, selectUser } from '../';
 import { Observable, of, throwError } from 'rxjs';
 import { map, switchMap, withLatestFrom, catchError, retry } from 'rxjs/operators';
 import { WsEvents, WsMessageEvents } from '../../models/enums/ws-events';
@@ -16,7 +16,6 @@ import {
   SetChannel,
   JoinChannel,
   CreateChannel,
-  LeaveChannel,
   ConnectFail,
   AddChannelUser,
   Handshake,
@@ -182,12 +181,18 @@ export class WSEffects {
     switchMap(payload => of(this._ws.send(payload)))
   );
 
-  private _handleConnectionError(errorEvent: Error | Event): Observable<any> {
-    if (errorEvent instanceof Event && errorEvent.type === 'error') {
+  private _handleConnectionError(error: Error | Event): Observable<ConnectFail> {
+    let displayError = 'Unexpected error occurred';
+
+    if (error instanceof Event && error.type === 'error') {
+      displayError = 'Service unavailable, please try again later';
       this._ws.killConnection();
-      this._errorHandler.displayError('Service unavailable, please try again later');
-      return of(new ConnectFail);
+    } else {
+      displayError = (<Error>error).message;
     }
+
+    this._errorHandler.displayError(displayError);
+    return of(new ConnectFail);
   }
 
   private _handleConnectionEvent(eventObj): Action {

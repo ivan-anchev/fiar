@@ -66,6 +66,10 @@ export const selectIsServiceUnavailable = createSelector(
   selectWsState,
   (wsState: ws.WSState) => wsState.isServiceUnavailable
 );
+export const selectIsConnecting = createSelector(
+  selectWsState,
+  (wsState: ws.WSState) => wsState.isConnecting
+);
 
 
 // #User

@@ -5,6 +5,6 @@
   <fiar-piece
     *ngFor="let piece of column; let pieceIndex = index;"
     [playerIndex]="mapIdToIndex(piece)"
-    [isWinning]="isPieceInSequence({ i: columnIndex, j: pieceIndex })">
+    [isWinning]="isPieceInSequence({ i: columnIndex, j: pieceIndex }) || forceWinner === piece">
   </fiar-piece>
 </fiar-board-col>

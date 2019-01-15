@@ -3,6 +3,7 @@ import { WSActions, All } from '../actions/ws.actions';
 
 export interface WSState {
   isConnected: boolean;
+  isConnecting: boolean;
   channel: Channel;
   openChannels: Array<string>;
   waitingForChannel: boolean;
@@ -11,6 +12,7 @@ export interface WSState {
 
 export const initialWSState: WSState = {
   isConnected: false,
+  isConnecting: false,
   channel: null,
   openChannels: null,
   waitingForChannel: false,
@@ -19,16 +21,23 @@ export const initialWSState: WSState = {
 
 export function reducer(state = initialWSState, action: All) {
   switch (action.type) {
+    case WSActions.CONNECT:
+      return {
+        ...state,
+        isConnecting: true
+      };
     case WSActions.SET_CONNECTED:
       return {
         ...state,
         isConnected: action.payload.isConnected,
-        isServiceUnavailable: false
+        isServiceUnavailable: false,
+        isConnecting: false
       };
     case WSActions.CONNECT_FAIL:
       return {
         ...initialWSState,
-        isServiceUnavailable: true
+        isServiceUnavailable: true,
+        isConnecting: false
       };
     case WSActions.SET_CHANNEL:
       return {

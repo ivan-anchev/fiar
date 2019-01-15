@@ -22,6 +22,8 @@ export class BoardComponent implements OnInit {
 
   @Input() mapIdToIndex: (string) => number;
 
+  @Input() forceWinner: string;
+
   @Output() columnClicked: EventEmitter<{ columnIndex: number }> = new EventEmitter();
 
   winningSequence: Array<PiecePosition>;

@@ -14,7 +14,7 @@ import {
   selectIsProfileEditMode,
   selectIsWaitingForPlayer,
   selectIsWaitingForChannel,
-  selectIsServiceUnavailable } from '../../../../store';
+  selectIsConnecting } from '../../../../store';
 
 @Component({
   selector: 'fiar-home',
@@ -44,6 +44,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   isWaitingForChannel$: Observable<boolean>;
 
   /**
+   * Is client trying to connect to WS
+   */
+  isConnecting$: Observable<boolean>;
+
+  /**
    * Current user object
    */
 
@@ -66,6 +71,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
     this.isProfileEditMode$ = this._store.pipe(
       select(selectIsProfileEditMode)
+    );
+    this.isConnecting$ = this._store.pipe(
+      select(selectIsConnecting)
     );
     this.isWaitingForPlayer$ = this._store.pipe(
       select(selectIsWaitingForPlayer)
