@@ -1,18 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as uuid from 'uuid/v4';
 import { Observable, ReplaySubject } from 'rxjs';
-import { tap, takeUntil } from 'rxjs/operators';
+import { tap, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { User } from '../../../../models/user';
 import { AppState } from '../../../../store';
-import { JoinChannel, CreateChannel} from '../../../../store/actions/ws.actions';
+import { JoinChannel, CreateChannel, WaitForChannel, LeaveChannel, Reset } from '../../../../store/actions/ws.actions';
 import { SetProfileEditMode } from '../../../../store/actions/ui.actions';
 import { SetUser } from '../../../../store/actions/user.actions';
 import {
   selectOpenChannels,
   selectUser,
-  selectIsProfileEditMode ,
-  selectIsWaitingForPlayer } from '../../../../store';
+  selectIsProfileEditMode,
+  selectIsWaitingForPlayer,
+  selectIsWaitingForChannel,
+  selectIsServiceUnavailable } from '../../../../store';
 
 @Component({
   selector: 'fiar-home',
@@ -31,7 +33,15 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   user$: Observable<User>;
 
+  /**
+   * Channel created, is waiting for player to join
+   */
   isWaitingForPlayer$: Observable<boolean>;
+
+  /**
+   * Is searching for game with no open channels
+   */
+  isWaitingForChannel$: Observable<boolean>;
 
   /**
    * Current user object
@@ -42,7 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   /**
    * WS Open channels
    */
-  private openChannels: Array<string>;
+  private openChannels: Array<string> = [];
 
   /**
    * Is component destroyed
@@ -50,14 +60,32 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _destroyed$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   constructor(private _store: Store<AppState>) {
-    this.user$ = this._store.select(selectUser).pipe(
+    this.user$ = this._store.pipe(
+      select(selectUser),
       tap(user => this.user = user)
     );
-    this.isProfileEditMode$ = this._store.select(selectIsProfileEditMode);
-    this.isWaitingForPlayer$ = this._store.select(selectIsWaitingForPlayer);
-    this._store.select(selectOpenChannels).pipe(
+    this.isProfileEditMode$ = this._store.pipe(
+      select(selectIsProfileEditMode)
+    );
+    this.isWaitingForPlayer$ = this._store.pipe(
+      select(selectIsWaitingForPlayer)
+    );
+    this.isWaitingForChannel$ = this._store.pipe(
+      select(selectIsWaitingForChannel)
+    );
+    this._store.pipe(
+      select(selectOpenChannels),
+      withLatestFrom(
+        this.isWaitingForChannel$,
+        (openChannels, isWaitingForChannel) => ({ openChannels, isWaitingForChannel })
+      ),
       takeUntil(this._destroyed$)
-    ).subscribe(openChannels => this.openChannels = openChannels);
+    ).subscribe(({ openChannels, isWaitingForChannel }) => {
+      this.openChannels = openChannels;
+      if (isWaitingForChannel && openChannels.length) {
+        this.joinGame();
+      }
+    });
   }
 
   startGame() {
@@ -68,7 +96,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   joinGame() {
     const channelName = this.openChannels[0];
-    this._store.dispatch(new JoinChannel({ channelName }));
+    if (channelName) {
+      this._store.dispatch(new JoinChannel({ channelName }));
+    } else {
+      this._store.dispatch(new WaitForChannel({ waitingForChannel: true }));
+    }
+
   }
 
   /**
@@ -89,7 +122,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._store.dispatch(new SetProfileEditMode({ isProfileEditMode: false }));
   }
 
+  cancelChannelSearch() {
+    this._store.dispatch(new WaitForChannel({ waitingForChannel: false }));
+  }
+
+  leaveChannel() {
+    this._store.dispatch(new LeaveChannel);
+  }
+
   ngOnInit() {
+    this._store.dispatch(new Reset);
+    this._store.dispatch(new LeaveChannel);
   }
 
   ngOnDestroy() {

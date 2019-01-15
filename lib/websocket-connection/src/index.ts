@@ -1,6 +1,6 @@
 import * as  websocket from 'websocket';
-import { Observable, Subject } from 'rxjs';
-import { shareReplay, filter, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, throwError } from 'rxjs';
+import { shareReplay, filter, takeUntil, catchError } from 'rxjs/operators';
 import { createEventEmitter } from './lib/event_emitter';
 
 /**
@@ -34,7 +34,10 @@ const createDownstreamObservable = (client: websocket.w3cwebsocket): Observable<
     return () => unsubs.forEach(unsub => unsub());
   });
 
-  return connection.pipe(shareReplay());
+  return connection.pipe(
+    catchError(err => throwError(err))
+    shareReplay()
+  );
 };
 
 /**
@@ -163,7 +166,11 @@ export const createClient = (host: string, port: number) => {
       if (client) {
         throw new Error('Client is already connected');
       }
-      client = new websocket.w3cwebsocket(`ws://${host}:${port}/`, ['echo-protocol']);
+      try {
+        client = new websocket.w3cwebsocket(`ws://${host}:${port}/`, ['echo-protocol']);
+      } catch (e) {
+        console.log(e);
+      }
       return connect(client, meta);
     }
   };

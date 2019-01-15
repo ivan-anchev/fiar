@@ -48,7 +48,7 @@ export const selectIsConnected = createSelector(
 );
 export const selectOpenChannels = createSelector(
   selectWsState,
-  (wsState:  ws.WSState) => wsState.openChannels
+  (wsState:  ws.WSState) => wsState.openChannels || []
 );
 export const selectChannel = createSelector(
   selectWsState,
@@ -57,6 +57,14 @@ export const selectChannel = createSelector(
 export const selectChannelUsers = createSelector(
   selectChannel,
   (channel) => channel ? Array.from(channel.users) : []
+);
+export const selectIsWaitingForChannel = createSelector(
+  selectWsState,
+  (wsState: ws.WSState) => wsState.waitingForChannel
+);
+export const selectIsServiceUnavailable = createSelector(
+  selectWsState,
+  (wsState: ws.WSState) => wsState.isServiceUnavailable
 );
 
 

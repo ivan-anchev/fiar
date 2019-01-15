@@ -4,7 +4,6 @@ const http = require('http');
 
 const CHANNEL_FULL_ERROR = { error: 'CHANNEL_FULL' };
 const CHANNEL_NOT_DEFINED_ERROR = { error: 'CHANNEL_NOT_DEFINED' };
-const NO_FREE_CHANNELS_ERROR = { error: 'NO_FREE_CHANNELS_ERROR'};
 
 const CHANNELS = new Map();
 const CONNECTIONS = new Set();
@@ -100,18 +99,9 @@ const getChannelByName = channelName => {
   return { channel };
 };
 
-const getFirstFreeChannel = () => {
-  const channel = CHANNELS.find((channel) => channel.size === 1);
-  if (!channel) {
-    return NO_FREE_CHANNELS_ERROR;
-  }
-
-  return { channel };
-}
-
 const getError = (channelName, error) => JSON.stringify({
     channel: { name: channelName },
-    ...error
+    error
 })
 
 WS_SERVER.on('request', request => {

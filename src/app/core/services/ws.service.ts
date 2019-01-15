@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { createClient } from 'websocket-connection';
 import { CoreModule } from '../core.module';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { WsMessageEvents } from '../../models/enums/ws-events';
+import { Observable, of, BehaviorSubject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: CoreModule
@@ -30,9 +31,7 @@ export class WsService {
    */
   isConnected$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor() {
-    this.client = createClient('localhost', 4000);
-  }
+  constructor() { }
 
   /**
    * Connect to Websocket
@@ -41,6 +40,10 @@ export class WsService {
    * @return <Observable<any>>
    */
   connect(meta = { }): Observable<any> {
+    if (!this.client) {
+      this.client = createClient('localhost', 4000);
+    }
+
     if (!this.connection) {
       this.connection = this.client.connect(meta);
     }
@@ -52,7 +55,7 @@ export class WsService {
     const { err, canJoin } = this._canJoinChannel();
 
     if (err) {
-      throw err;
+      throwError(err);
     }
 
     this.channel = this.connection.join(channelName, { maxSize: 2});
@@ -65,8 +68,19 @@ export class WsService {
     };
   }
 
+  killConnection() {
+    this.connection = null;
+  }
+
   send(message: unknown) {
     this.channel.send(message);
+  }
+
+  leaveChannel() {
+    if (this.channel) {
+      this.channel.leave();
+      this.channel = null;
+    }
   }
 
   createChannel(channelName: string, channelConfig = { maxSize: 2, host: '' }) {
@@ -74,19 +88,19 @@ export class WsService {
     const { host } = channelConfig;
 
     if (err) {
-      throw err;
+      return throwError(err);
     }
 
     this.channel = this.connection.join(channelName, channelConfig);
 
     const { downstream } = this.channel;
 
-    return {
+    return of({
       downstream,
       host,
       name: channelName,
       users: new Set()
-    };
+    });
   }
 
   private _canJoinChannel() {

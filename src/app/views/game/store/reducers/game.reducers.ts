@@ -54,6 +54,10 @@ export function reducer(state = initialState, action: All) {
         winningSequence: action.payload.winningSequence,
         winValidated: false
       };
+    case GameActionTypes.END_GAME:
+      return {
+        ...initialState
+      };
     default: return state;
   }
 }

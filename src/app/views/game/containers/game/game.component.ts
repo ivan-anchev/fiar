@@ -20,7 +20,7 @@ import {
 } from '../../store';
 
 import { StartGame } from '../../store/actions/feature.actions';
-import { PlacePiece } from '../../store/actions/game.actions';
+import { PlacePiece, EndGame } from '../../store/actions/game.actions';
 import { User } from '../../../../models/user';
 
 @Component({
@@ -97,6 +97,10 @@ export class GameComponent implements OnInit, OnDestroy {
   placePiece({ columnIndex }) {
     const playerId = this.userObj.id;
     this._store.dispatch(new PlacePiece({ playerId, columnIndex }));
+  }
+
+  exit() {
+    this._store.dispatch(new EndGame);
   }
 
   ngOnInit() {

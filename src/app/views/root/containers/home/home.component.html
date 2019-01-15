@@ -15,7 +15,7 @@
       <mat-card *ngIf="(user$ | async) as user" class="flc-card-fixed">
         <mat-card-content>
           <!-- Static menu -->
-          <div *ngIf="!(isWaitingForPlayer$ | async)" class="flc-layout--center-middle flex--column">
+          <div *ngIf="!(isWaitingForPlayer$ | async) && !(isWaitingForChannel$ | async)" class="flc-layout--center-middle flex--column">
             <fiar-avatar [type]="user.avatar" isActive="true"></fiar-avatar>
             <span class="mat-h2 margin--clear flc-layout--column-middle">
                 {{user.name || 'You'}}
@@ -25,22 +25,33 @@
           <!-- Waiting for player to join -->
           <div *ngIf="isWaitingForPlayer$ | async" class="flc-layout--center-middle flex--column">
             <mat-spinner color="accent"></mat-spinner>
-            <span class="mat-body flc-margin--small-top">Waiting for player to join...</span>
+            <span class="mat-body flc-margin--small-top text--center">Waiting for player to join...</span>
+          </div>
+
+          <!-- Waiting for open channel  -->
+          <div *ngIf="isWaitingForChannel$ | async" class="flc-layout--center-middle flex--column">
+            <mat-spinner color="accent"></mat-spinner>
+            <span class="mat-body flc-margin--small-top text--center">There are no open games at the moment. Please wait...</span>
           </div>
         </mat-card-content>
 
         <mat-divider></mat-divider>
 
         <mat-card-actions>
-          <div *ngIf="!(isWaitingForPlayer$ | async)">
+          <div *ngIf="!(isWaitingForPlayer$ | async) && !(isWaitingForChannel$ | async)">
             <button mat-raised-button (click)="startGame()"color="accent">START GAME</button>
             <button mat-button color="accent" (click)="joinGame()">JOIN GAME</button>
           </div>
-
+          <!-- Cancel channel search -->
+          <div *ngIf="isWaitingForChannel$ | async">
+            <button mat-button (click)="cancelChannelSearch()">Cancel</button>
+          </div>
+          <!-- Leave own channel -->
           <div *ngIf="isWaitingForPlayer$ | async">
-            <button mat-button>Cancel</button>
+            <button mat-button (click)="leaveChannel()">Cancel</button>
           </div>
         </mat-card-actions>
+
       </mat-card>
     </ng-template>
 </div>

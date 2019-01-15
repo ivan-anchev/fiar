@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store, Action, select } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { map, tap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { WsAction } from '../actions/feature.actions';
 import { WsMessageEvents } from '../../../../models/enums/ws-events';
 import { selectPlayerIds, selectClient, selectBoard } from '../';
@@ -20,7 +21,8 @@ import {
 export class GameEffects {
   constructor(
     private _actions: Actions,
-    private _store: Store<AppState>) { }
+    private _store: Store<AppState>,
+    private _router: Router) { }
 
   @Effect()
   placePiece$: Observable<any> = this._actions.pipe(
@@ -65,14 +67,20 @@ export class GameEffects {
   );
 
   @Effect()
-  $winGameInit: Observable<any> = this._actions.pipe(
+  winGameInit$: Observable<any> = this._actions.pipe(
     ofType(GameActionTypes.WIN_GAME_INIT),
     map((action: WinGameInit) => action.payload),
     switchMap(payload => of(new WsAction({ type: WsMessageEvents.VALIDATE_WIN_GAME, payload })))
   );
 
+  @Effect({ dispatch: false })
+  endGame$: Observable<any> = this._actions.pipe(
+    ofType(GameActionTypes.END_GAME),
+    tap(() => this._router.navigate(['/home']))
+  );
+
   @Effect()
-  $validateWinGame: Observable<any> = this._actions.pipe(
+  validateWinGame$: Observable<any> = this._actions.pipe(
     ofType(GameActionTypes.VALIDATE_WIN_GAME),
     map((action: ValidateWinGame) => action.payload),
     withLatestFrom(
