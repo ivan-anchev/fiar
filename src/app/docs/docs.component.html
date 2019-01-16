@@ -2,24 +2,24 @@
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">
-        <img src="./falcon_logo_black.svg" />
+        <img src="assets/falcon_logo_black.svg" />
       </span>
-      <a href="/" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Back to game</a>
+      <a [routerLink]="['/']" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Back to game</a>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link flc-navigation__group-header" href="#requirements">Requirements</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#acceptance-criteria">Acceptance criteria</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#technical-requirements">Technical requirements</a>
+        <a class="mdl-navigation__link flc-navigation__group-header" [routerLink]="['./']" fragment="requirements">Requirements</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="acceptance-criteria">Acceptance criteria</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="technical-requirements">Technical requirements</a>
 
-        <a class="mdl-navigation__link flc-navigation__group-header" href="#boilerplate">Boilerplate</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#get-started">Get started</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#websocket-api">Websocket API</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#writing-tests">Writing tests</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#ui-library">UI library</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#game-assets">Game assets</a>
+        <a class="mdl-navigation__link flc-navigation__group-header" [routerLink]="['./']" fragment="boilerplate">Boilerplate</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="get-started">Get started</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="websocket-api">Websocket API</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="writing-tests">Writing tests</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="ui-library">UI library</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="game-assets">Game assets</a>
 
-        <a class="mdl-navigation__link flc-navigation__group-header" href="#how-to-submit">How to submit?</a>
-        <a class="mdl-navigation__link flc-navigation__group-item" href="#after-submission">After submission</a>
-        <a class="mdl-navigation__link flc-navigation__group-header" href="#how-do-we-evaluate">How do we evaluate?</a>
+        <a class="mdl-navigation__link flc-navigation__group-header" [routerLink]="['./']" fragment="how-to-submit">How to submit?</a>
+        <a class="mdl-navigation__link flc-navigation__group-item" [routerLink]="['./']" fragment="after-submission">After submission</a>
+        <a class="mdl-navigation__link flc-navigation__group-header" [routerLink]="['./']" fragment="how-do-we-evaluate">How do we evaluate?</a>
       </nav>
 
     </div>
@@ -60,7 +60,7 @@
                     If you, for any reason, estimate that you cannot finish the assignment within the timeframe please be communicative about an ETA.
                   </div>
                   <div>
-                    If you navigate to <a href="/">http://localhost:8080</a> <i>(or click "Back to Game" in the left-hand menu)</i> you'll see a page with static markup demoing the initial layout of the game.
+                    If you navigate to <a [routerLink]="['/']">http://localhost:8080</a> <i>(or click "Back to Game" in the left-hand menu)</i> you'll see a page with static markup demoing the initial layout of the game.
                     <br />
                     Your task is to turn this page into a Single Page Application hosting the game and the requirements hereof.
                     <br />
@@ -83,7 +83,7 @@
                         <li><i>(Optional)</i> Leave/surrender a game</li>
                       </ol>
                     </li>
-                    <li>The gameplay must work in realtime across two browser sessions <i>(using the <a href="#websocket-api">Websocket API</a> layer provided in the boilerplate)</i>.</li>
+                    <li>The gameplay must work in realtime across two browser sessions <i>(using the <a [routerLink]="['./']" fragment="websocket-api">Websocket API</a> layer provided in the boilerplate)</i>.</li>
                     <li>Only two players can join a single game.</li>
                     <li>Multiple game sessions can be running at the same time on the same Websocket API instance.</li>
                     <li>The game is implemented using TypeScript. <i>(Custom type definitions are encouraged, but not required</i>).</li>
@@ -127,7 +127,7 @@
                       <li>Complicated or non-obvious choices in the code must be supported by code-level comments.</li>
                       <li>The <code>README.md</code> must contain a brief <i>(a few lines)</i> explanation of how you solved the task, as well as objective arguments for potential changes to the boilerplate.</li>
                     </ul>
-                    Read more about how we evaluate your submission <a href="#how-do-we-evaluate">here</a>.
+                    Read more about how we evaluate your submission <a [routerLink]="['./']" fragment="how-do-we-evaluate">here</a>.
                   </div>
 
                   <h2 class="mdl-typography--title">Boilerplate</h2>
@@ -170,7 +170,7 @@
                     <h3 class="mdl-typography--body-2 flc-subhead">Websocket API</h3>
                     <a name="websocket-api"></a>
                     <div>
-                      As mentioned in the <a href="#requirements">requirements section</a> the game must work in realtime across two browser sessions.
+                      As mentioned in the <a [routerLink]="['./']" fragment="requirements">requirements section</a> the game must work in realtime across two browser sessions.
                       To help you accomplish this we're providing a pre-defined Websocket setup.
                       The setup consist of two layers:
                       <ul>
