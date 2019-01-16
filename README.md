@@ -1,27 +1,38 @@
-# Fiar
+# Four-in-a-row
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
+Four-in-a-row game impemenation built with [Angular](https://angular.io)
 
-## Development server
+## Getting started
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To get the game up and running, checkout this repo and run the following commands from the root directory
+1. ```npm install``` to install all dependencies
+2. ```npm run ws_api``` to start the WebSocket server
+3. ```npm start``` to start the development server at `http://localhost:4200/`
+4. **TODO** ```npm test``` to start the test runner
+5. ```npm build``` for JIT build or ```npm run build-aot``` for [AOT](https://angular.io/guide/aot-compiler)
 
-## Code scaffolding
+## Structure
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+  ├── api                   # Webscocket API
+  ├── dist                  # Build output directory
+  ├── lib                   # Libraries (ex. websocket-connection).
+  └── src                   # Source files (alternatively `lib` or `app`)
+       └── app              
+            └── views       
+                  ├── root  # Root module [Lazy] (wraps the application)
+                  └── game  # Game module [Lazy] (holds the logic of the game itself)
+            ├── core        # Core services module 
+            ├── store       # Contains store actions, reducers and effects
+            ├── shared      # Shared module for commonly used components
+            ├── models      # Models
+            └── guards      # Guards 
+ ```
+## State
 
-## Build
+State is management via [NgRx](https://ngrx.io)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### TODOS
+1. Tests
+2. Disconnect/Reconnect
+3. PWA
