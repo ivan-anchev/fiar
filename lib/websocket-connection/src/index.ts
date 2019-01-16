@@ -35,7 +35,7 @@ const createDownstreamObservable = (client: websocket.w3cwebsocket): Observable<
   });
 
   return connection.pipe(
-    catchError(err => throwError(err))
+    catchError(err => throwError(err)),
     shareReplay()
   );
 };
